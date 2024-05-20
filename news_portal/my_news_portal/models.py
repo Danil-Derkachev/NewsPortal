@@ -32,9 +32,15 @@ class Author(SomeBaseModel):
         self.rating = posts_rating * 3 + comments_rating + posts_comments_rating  # Обновляем рейтинг автора
         self.save()
 
+    def __str__(self):
+        return f'{self.user}: {self.rating}'
+
 
 class Category(SomeBaseModel):
     name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Post(SomeBaseModel):
@@ -48,7 +54,7 @@ class Post(SomeBaseModel):
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=TYPES, default=article)
-    datetime = datetime.now()
+    datetime = models.DateField(auto_now_add=True)
     categories = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)
     text = models.TextField()
@@ -64,6 +70,9 @@ class Post(SomeBaseModel):
 
     def preview(self):
         return self.text[:124] + '...'
+
+    def __str__(self):
+        return f'{self.title}: {self.text}'
 
 
 class PostCategory(SomeBaseModel):
@@ -85,3 +94,6 @@ class Comment(SomeBaseModel):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.user}: {self.text}'

@@ -1,0 +1,39 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+<table>
+<tbody>
+<tr>
+<td>Всего новостей:</td>
+<td><em>{{ news|length }}</em></td>
+</tr>
+</tbody>
+</table>
+    <h1>Все новости</h1>
+   <hr>
+   {% if news %}
+       <table>
+           <tr>
+               <td>Заголовок</td>
+               <td>Дата</td>
+               <td>Текст</td>
+           </tr>
+           {% for n in news %}
+           <tr>
+               <td>{{ n.title }}</td>
+               <td>{{ n.datetime|date:'d/M/Y' }}</td>
+               <td>{{ n.text|censor|shorten }}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Новостей нет</h2>
+   {% endif %}
+{% endblock content %}
