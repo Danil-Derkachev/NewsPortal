@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class SomeBaseModel(models.Model):
@@ -54,7 +55,7 @@ class Post(SomeBaseModel):
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=TYPES, default=article)
-    datetime = models.DateField(auto_now_add=True)
+    datetime = models.DateField(auto_now_add=False)
     categories = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)
     text = models.TextField()
@@ -73,6 +74,9 @@ class Post(SomeBaseModel):
 
     def __str__(self):
         return f'{self.title}: {self.text}'
+
+    def get_absolute_url(self):
+        return f'/news/search'
 
 
 class PostCategory(SomeBaseModel):
