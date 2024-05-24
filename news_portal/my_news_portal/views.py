@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -6,7 +7,7 @@ from .forms import NewsForm
 from .models import *
 
 
-class NewsList(ListView):
+class NewsList(LoginRequiredMixin, ListView):
     model = Post
     ordering = '-datetime'
     template_name = 'news_list.html'
@@ -21,6 +22,7 @@ class NewsList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
 
 
@@ -30,7 +32,8 @@ class OneNewsDetail(DetailView):
     context_object_name = 'one_news'
 
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('my_news_portal.add_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
     model = Post
@@ -43,7 +46,8 @@ class NewsCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsEdit(UpdateView):
+class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    permission_required = ('my_news_portal.change_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
     model = Post
@@ -57,7 +61,8 @@ class NewsDelete(DeleteView):
     success_url = reverse_lazy('news_list')
 
 
-class ArticleCreate(CreateView):
+class ArticleCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('my_news_portal.add_post',)
     form_class = NewsForm
     model = Post
     template_name = 'create_article.html'
@@ -68,7 +73,8 @@ class ArticleCreate(CreateView):
         return super().form_valid(form)
 
 
-class ArticleEdit(UpdateView):
+class ArticleEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('my_news_portal.change_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
     model = Post
