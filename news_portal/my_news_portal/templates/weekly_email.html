@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h4>Новости за эту неделю</h4>
+{% for news_item in news %}
+<p><a href="{{ news_item.url }}">{{ news.title }}</a></p>
+{% endfor %}
+</body>
+</html>

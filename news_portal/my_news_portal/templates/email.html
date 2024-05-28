@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Добавлена новость на сайт</h1>
+<h4>Здравствуй, username. Новая статья в твоём любимом разделе!</h4>
 <p><a href="{{ news.url }}">{{ news.title }}</a></p>
+<p>{{ appointment.text|truncatechars:50 }}</p>
 </body>
 </html>

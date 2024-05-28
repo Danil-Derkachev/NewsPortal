@@ -2,6 +2,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 class SomeBaseModel(models.Model):
@@ -60,7 +61,7 @@ class Post(SomeBaseModel):
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=TYPES, default=article)
-    datetime = models.DateField(auto_now_add=False)
+    datetime = models.DateField(auto_now_add=True)
     categories = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)
     text = models.TextField()
@@ -95,7 +96,7 @@ class Comment(SomeBaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
-    datetime = datetime.now()
+    datetime = models.DateTimeField(default=timezone.now)
     rating = models.IntegerField(default=0)
 
     def like(self):
