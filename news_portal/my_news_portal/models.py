@@ -39,9 +39,14 @@ class Author(SomeBaseModel):
 
 class Category(SomeBaseModel):
     name = models.CharField(max_length=255, unique=True)
-
+    #subscribers = models.ManyToManyField(Subscriber, through='Subscriber')
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}'#: {self.subscribers}'
+
+
+class Subscriber(SomeBaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
 class Post(SomeBaseModel):
@@ -83,6 +88,8 @@ class PostCategory(SomeBaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.post}: {self.category}'
 
 class Comment(SomeBaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

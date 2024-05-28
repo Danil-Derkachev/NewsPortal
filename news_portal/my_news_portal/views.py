@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import PostFilter
@@ -12,7 +13,7 @@ class NewsList(LoginRequiredMixin, ListView):
     ordering = '-datetime'
     template_name = 'news_list.html'
     context_object_name = 'news_list'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -23,6 +24,7 @@ class NewsList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        context['categories'] = Category.objects.all()
         return context
 
 
@@ -87,3 +89,15 @@ class ArticleDelete(DeleteView):
     template_name = 'delete_article.html'
     success_url = reverse_lazy('news_list')
 
+
+def news_subscribe(request):
+    sub = Subscriber.objects.filter(user=request.user).first()
+    if request.method == 'POST':
+        if not sub:
+            category_object = Category.objects.get(name=request.POST['category'])
+            Subscriber.objects.create(user=request.user, category=category_object)
+            return redirect('news_list')
+        else:
+            return redirect('news_list')
+    else:
+        return redirect('news_list')

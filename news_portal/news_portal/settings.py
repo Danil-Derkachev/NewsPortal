@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
 
     'django_filters',
+    'django_apscheduler',
 
     'allauth',
     'allauth.account',
@@ -52,6 +53,8 @@ INSTALLED_APPS = [
 
     'my_news_portal',
     'sign',
+    #'appointment',
+    'appointment.apps.AppointmentConfig',
 ]
 
 SITE_ID = 1
@@ -63,8 +66,21 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
+
+ADMINS = [
+    ('Admin_name', 'admin@yandex.ru'),
+]
+MANAGERS = [
+    ('Manager_name', 'manager@yandex.ru'),
+]
+
+# формат даты, которую будет воспринимать наш задачник (вспоминаем модуль по фильтрам)
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+# если задача не выполняется за 25 секунд, то она автоматически снимается, можете поставить время побольше, но как правило, это сильно бьёт по производительности сервера
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -147,7 +163,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -164,4 +180,13 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = 'derk4chev.danil'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_PASSWORD = 'fibjcrgmvcdybgtu'  # пароль от почты
+EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Отправка всех Email в консоль
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Отправка всех Email на почту
+# not enough values to unpack (expected 2, got 1)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
