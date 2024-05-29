@@ -12,25 +12,24 @@ from datetime import datetime, timedelta
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from news_portal.settings import DEFAULT_FROM_EMAIL
-from .models import *
+from news_portal import settings
+from my_news_portal.models import Subscriber, Post
 
 logger = logging.getLogger(__name__)
 
 
-# наша задача по выводу текста на экран
-def my_job():
+def send_weekly_email():
     #  Your job processing logic here...
-    subscribers = Subscriber.objects.all().values_list('user__email')
+    subscribers_emails = set(Subscriber.objects.all().values_list('user__email'))
     today = datetime.today()
-    news = Post.objects.filter(datetime__lte=today, pub_date__gt=today - timedelta(days=7))
+    news = Post.objects.filter(datetime__lte=today, datetime__gt=today - timedelta(days=7))
     text_content = f'Новости за эту неделю'
     html_content = render_to_string('weekly_email.html', {'news': news})
     msg = EmailMultiAlternatives(
         subject='Читайте новости за эту неделю',
         body=text_content,
-        from_email=DEFAULT_FROM_EMAIL,
-        to=subscribers
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=subscribers_emails
     )
     msg.attach_alternative(html_content, 'text/html')
     msg.send()
@@ -51,14 +50,14 @@ class Command(BaseCommand):
 
         # добавляем работу нашему задачнику
         scheduler.add_job(
-            my_job,
+            send_weekly_email,
             trigger=CronTrigger(second="*/10"),
             # То же, что и интервал, но задача тригера таким образом более понятна django
-            id="my_job",  # уникальный айди
+            id="send_weekly_email",  # уникальный айди
             max_instances=1,
             replace_existing=True,
         )
-        logger.info("Added job 'my_job'.")
+        logger.info("Added job 'send_weekly_email'.")
 
         scheduler.add_job(
             delete_old_job_executions,

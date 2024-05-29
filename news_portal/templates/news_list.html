@@ -4,33 +4,41 @@
 {% load custom_tags %}
 
 {% block title %}
-Post
+Новости
 {% endblock title %}
 
 {% block content %}
-<h2>Страница авторизованного пользователя {{request.user.username}}</h2>
+<!--Информация пользователя-->
+<h2>Авторизован как {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя</div>
 <button><a href="sign/logout/">Выйти</a></button>
 
+<!--Кнопки для создания новостей-->
 {% if is_not_author %}
 <button><a href="sign/upgrade/"> Стать автором </a></button>
+{% else %}
+<button><a href="news/create/"> Написать новость </a></button>
+<button><a href="article/create/"> Написать статью </a></button>
 {% endif %}
 
+<!--Количество новостей на сайте-->
 <table>
     <tbody>
     <tr>
         <td>Всего новостей:</td>
-        <td><em>{{ news_list|length }}</em></td>
+        <td><em>{{ all_news|length }}</em></td>
     </tr>
     </tbody>
 </table>
 
-{# Поиск по фильтру #}
+<!--Поиск по фильтру-->
+<h3>Поиск по фильтру</h3>
 <form action="" method="get">
     {{ filterset.form.as_p }}
     <input type="submit" value="Найти"/>
 </form>
 
+<!--Подписка на отдельные категории-->
 <div class="col-md-4">
     <h1>Категории</h1>
     <ul>
@@ -41,14 +49,15 @@ Post
             <form action="{% url 'news_subscribe' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="category" value="{{ category.name }}">
-                <input type="submit" value="Подписаться на новости"></input>
+                <input type="submit" value="Подписаться на категорию"></input>
             </form>
         </li>
         {% endfor %}
     </ul>
 </div>
 
-<h1>Все новости</h1>
+<!--Таблица всех новостей-->
+<h1>Новые новости</h1>
 <hr>
 {% if news_list %}
 <table>
@@ -63,18 +72,17 @@ Post
     <tr>
         <td>{{ n.id }}</td>
         <td>{{ n.type }}</td>
-        <td>{{ n.title }}</td>
+        <td><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></td>
         <td>{{ n.datetime|date:'d.m.Y' }}</td>
         <td>{{ n.text|censor|shorten }}</td>
     </tr>
     {% endfor %}
-
 </table>
 {% else %}
 <h2>Новостей нет</h2>
 {% endif %}
 
-{# Пагинация #}
+<!--Пагинация-->
 {% if page_obj.has_previous %}
 {# Для каждой ссылки пагинации указываем обработку через тег url_replace #}
 <a href="?{% url_replace page=1 %}">1</a>
@@ -83,9 +91,7 @@ Post
 <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
 {% endif %}
 {% endif %}
-
 {{ page_obj.number }}
-
 {% if page_obj.has_next %}
 <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
 {% if paginator.num_pages != page_obj.next_page_number %}

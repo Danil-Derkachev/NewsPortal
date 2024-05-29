@@ -183,11 +183,10 @@ STATICFILES_DIRS = [
 
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
-EMAIL_HOST_USER = 'derk4chev.danil'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
-EMAIL_HOST_PASSWORD = 'fibjcrgmvcdybgtu'  # пароль от почты
+EMAIL_HOST_USER = 'djangotest2'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_PASSWORD = 'jujugvbfzrcehrfv'  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Отправка всех Email в консоль
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Отправка всех Email на почту
-# not enough values to unpack (expected 2, got 1)
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 

@@ -40,7 +40,7 @@ class Author(SomeBaseModel):
 
 class Category(SomeBaseModel):
     name = models.CharField(max_length=255, unique=True)
-    #subscribers = models.ManyToManyField(Subscriber, through='Subscriber')
+    #subscribers = models.ManyToManyField(Subscriber, on_delete=models.CASCADE)
     def __str__(self):
         return f'{self.name}'#: {self.subscribers}'
 
@@ -48,6 +48,11 @@ class Category(SomeBaseModel):
 class Subscriber(SomeBaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+# class SubscriberCategory(SomeBaseModel):
+#     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
 class Post(SomeBaseModel):
@@ -82,7 +87,7 @@ class Post(SomeBaseModel):
         return f'{self.title}: {self.text}'
 
     def get_absolute_url(self):
-        return f'/news/search'
+        return reverse('one_news', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
 
 
 class PostCategory(SomeBaseModel):
