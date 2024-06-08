@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.core.cache import cache
 
 
 class SomeBaseModel(models.Model):
@@ -86,6 +87,10 @@ class Post(SomeBaseModel):
 
     def get_absolute_url(self):
         return reverse('one_news', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'one_news-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
 
 
 class PostCategory(SomeBaseModel):

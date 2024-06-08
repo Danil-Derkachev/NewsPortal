@@ -1,5 +1,6 @@
 from django.urls import path
-# Импортируем созданное нами представление
+from django.views.decorators.cache import cache_page
+
 from . import views
 from .views import *
 

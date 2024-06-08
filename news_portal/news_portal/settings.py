@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'my_news_portal',
     'sign',
     #'appointment',
-    'appointment.apps.AppointmentConfig',
+    #'appointment.apps.AppointmentConfig',
 ]
 
 SITE_ID = 1
@@ -202,3 +202,10 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+    }
+}
