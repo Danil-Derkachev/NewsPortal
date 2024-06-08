@@ -42,7 +42,7 @@ class OneNewsDetail(DetailView):
         if not obj:
             obj = super().get_object(queryset=self.queryset)
             cache.set(f'one_news-{self.kwargs["pk"]}', obj)
-            return obj
+        return obj
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
