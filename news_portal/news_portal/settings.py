@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
+
+
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ql@h%%l@9fzsb3d8ja2j=_cng9dslfhdw@9=xup$b!etd)&ah5'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -183,15 +190,15 @@ STATICFILES_DIRS = [
 
 EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
-EMAIL_HOST_USER = 'djangotest2'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
-EMAIL_HOST_PASSWORD = 'jujugvbfzrcehrfv'  # пароль от почты
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Отправка всех Email в консоль
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Отправка всех Email на почту
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
-CELERY_BROKER_URL = 'redis://default:b7kMeL4nWMfjupWEQp2LPVkRgMWNGbRB@redis-17983.c91.us-east-1-3.ec2.redns.redis-cloud.com:17983'
-CELERY_RESULT_BACKEND = 'redis://default:b7kMeL4nWMfjupWEQp2LPVkRgMWNGbRB@redis-17983.c91.us-east-1-3.ec2.redns.redis-cloud.com:17983'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
