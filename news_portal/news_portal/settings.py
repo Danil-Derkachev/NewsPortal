@@ -190,3 +190,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Отправ
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Отправка всех Email на почту
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
 
+CELERY_BROKER_URL = 'redis://default:b7kMeL4nWMfjupWEQp2LPVkRgMWNGbRB@redis-17983.c91.us-east-1-3.ec2.redns.redis-cloud.com:17983'
+CELERY_RESULT_BACKEND = 'redis://default:b7kMeL4nWMfjupWEQp2LPVkRgMWNGbRB@redis-17983.c91.us-east-1-3.ec2.redns.redis-cloud.com:17983'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

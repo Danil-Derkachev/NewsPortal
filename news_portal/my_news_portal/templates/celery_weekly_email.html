@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h4>Новости за эту неделю</h4>
+{% for news_item in news %}
+<p><a href="http://127.0.0.1:8000{{ news_item.get_absolute_url }}">{{ news_item.title }}</a></p>
+{% endfor %}
+</body>
+</html>

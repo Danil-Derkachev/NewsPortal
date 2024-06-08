@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .filters import PostFilter
 from .forms import NewsForm
 from .models import *
+from .tasks import *
 
 
 class NewsList(LoginRequiredMixin, ListView):
@@ -44,8 +45,9 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     template_name = 'create_news.html'
 
     def form_valid(self, form):
-        post = form.save(commit=False)
+        post = form.save()#(commit=False)
         post.type = 'NE'
+        send_email_to_subscribed_users.apply_async([post.pk])
         return super().form_valid(form)
 
 
