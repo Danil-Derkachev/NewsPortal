@@ -81,6 +81,10 @@ class Post(SomeBaseModel):
     def preview(self):
         return self.text[:124] + '...'
 
+    @property
+    def is_popular(self):
+        return self.rating > 0
+
     def __str__(self):
         return f'{self.title}: {self.text}'
 
