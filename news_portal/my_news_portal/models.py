@@ -41,9 +41,8 @@ class Author(SomeBaseModel):
 
 class Category(SomeBaseModel):
     name = models.CharField(max_length=255, unique=True)
-    #subscribers = models.ManyToManyField(Subscriber, on_delete=models.CASCADE)
     def __str__(self):
-        return f'{self.name}'#: {self.subscribers}'
+        return f'{self.name}'
 
 
 class Subscriber(SomeBaseModel):
@@ -59,8 +58,8 @@ class Post(SomeBaseModel):
     news = 'NE'
 
     TYPES = [
-        (article, 'Статья'),
-        (news, 'Новость')
+        (article, 'Article'),
+        (news, 'News')
     ]
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
