@@ -40,16 +40,15 @@
 
 <!--Подписка на отдельные категории-->
 <div class="col-md-4">
-    <h1>Категории</h1>
+    <h3>Категории</h3>
     <ul>
         {% for category in categories %}    <!-- categories обозначена в get_context_data!!! -->
         <li>
-            <a href="?category={{ category.name }}">{{ category.name }}</a>
-
+            <a href="{{ category.name }}">{{ category.name }}</a>
             <form action="{% url 'news_subscribe' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="category" value="{{ category.name }}">
-                <input type="submit" value="Подписаться на категорию"></input>
+                <input type="submit" value="Подписаться">
             </form>
         </li>
         {% endfor %}
@@ -57,27 +56,28 @@
 </div>
 
 <!--Таблица всех новостей-->
-<h1>Новые новости</h1>
+<h1>Актуальные новости</h1>
 <hr>
 {% if news_list %}
-<table>
-    <tr>
-        <td>ID</td>
-        <td>Тип</td>
-        <td>Заголовок</td>
-        <td>Дата</td>
-        <td>Текст</td>
-    </tr>
-    {% for n in news_list %}
-    <tr>
-        <td>{{ n.id }}</td>
-        <td>{{ n.type }}</td>
-        <td><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></td>
-        <td>{{ n.datetime|date:'d.m.Y' }}</td>
-        <td>{{ n.text|censor|shorten }}</td>
-    </tr>
-    {% endfor %}
-</table>
+{% for n in news_list %}
+<header>
+    <section>
+        <h5><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h5>
+    </section>
+</header>
+<main>
+    <section>
+            {{ n.text|censor|shorten }}
+    </section>
+</main>
+<footer>
+    <section>
+        Рейтинг новости {{ n.rating }} | Автор {{ n.author }} | Рейтинг автора {{ n.author.rating }} |
+        Дата публикации {{ n.datetime|date:'d.m.Y' }}
+    </section>
+</footer>
+<hr>
+{% endfor %}
 {% else %}
 <h2>Новостей нет</h2>
 {% endif %}

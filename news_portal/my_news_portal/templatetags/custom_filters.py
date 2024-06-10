@@ -11,8 +11,8 @@ def shorten(value):
     """
     value: значение, к которому нужно применить фильтр
     """
-    if len(value) > 20:
-        return f'{value[:20]}...'
+    if len(value) > 150:
+        return f'{value[:150]}...'
     else:
         return f'{value}'
 
