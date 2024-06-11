@@ -36,7 +36,7 @@ class Author(SomeBaseModel):
         self.save()
 
     def __str__(self):
-        return f'{self.user}: {self.rating}'
+        return f'{self.user}'
 
 
 class Category(SomeBaseModel):
@@ -86,7 +86,7 @@ class Post(SomeBaseModel):
         return self.rating > 0
 
     def __str__(self):
-        return f'{self.title}: {self.text}'
+        return f'{self.title}'
 
     def get_absolute_url(self):
         return reverse('one_news', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу

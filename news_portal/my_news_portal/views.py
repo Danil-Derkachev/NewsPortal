@@ -11,6 +11,7 @@ from .tasks import *
 
 
 class NewsList(LoginRequiredMixin, ListView):
+    """ Отображение всех новостей и статей """
     model = Post
     ordering = '-datetime'  # Сортировка по дате (не по времени)
     template_name = 'news_list.html'
@@ -32,6 +33,7 @@ class NewsList(LoginRequiredMixin, ListView):
 
 
 class OneNewsDetail(DetailView):
+    """ Отображение отдельно взятой новости или статьи """
     model = Post
     template_name = 'one_news.html'
     context_object_name = 'one_news'
@@ -46,6 +48,7 @@ class OneNewsDetail(DetailView):
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
+    """ Создание новости """
     permission_required = ('my_news_portal.add_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
@@ -61,6 +64,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
 
 
 class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    """ Редактирование новости """
     permission_required = ('my_news_portal.change_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
@@ -70,12 +74,14 @@ class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
 
 
 class NewsDelete(DeleteView):
+    """ Удаление новости """
     model = Post
     template_name = 'delete_news.html'
     success_url = reverse_lazy('news_list')
 
 
 class ArticleCreate(PermissionRequiredMixin, CreateView):
+    """ Создание статьи """
     permission_required = ('my_news_portal.add_post',)
     form_class = NewsForm
     model = Post
@@ -88,6 +94,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
 
 
 class ArticleEdit(PermissionRequiredMixin, UpdateView):
+    """ Редактирование статьи """
     permission_required = ('my_news_portal.change_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
@@ -97,19 +104,29 @@ class ArticleEdit(PermissionRequiredMixin, UpdateView):
 
 
 class ArticleDelete(DeleteView):
+    """ Удаление статьи """
     model = Post
     template_name = 'delete_article.html'
     success_url = reverse_lazy('news_list')
 
 
-def news_subscribe(request):
-    #sub = Subscriber.objects.filter(user=request.user).first()
-    if request.method == 'POST':
-        #if not sub:
-            category_object = Category.objects.get(name=request.POST['category'])
-            Subscriber.objects.create(user=request.user, category=category_object)
-            return redirect('news_list')
-        #else:
-            #redirect('news_list')
+def subscribe_to_category(request):
+    """Подписка на категорию"""
+    category_obj = Category.objects.get(name=request.POST['category'])
+    sub_obj = Subscriber.objects.filter(user=request.user, category=category_obj)
+    if not sub_obj:
+        Subscriber.objects.create(user=request.user, category=category_obj)
+        return redirect('news_list')
+    else:
+        return redirect('news_list')
+
+
+def unsubscribe_from_category(request):
+    """Отписка от категории"""
+    category_obj = Category.objects.get(name=request.POST['category'])
+    sub_obj = Subscriber.objects.filter(user=request.user, category=category_obj)
+    if sub_obj:
+        Subscriber.objects.filter(user=request.user, category=category_obj).delete()
+        return redirect('news_list')
     else:
         return redirect('news_list')

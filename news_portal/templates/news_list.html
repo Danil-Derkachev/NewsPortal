@@ -4,52 +4,46 @@
 {% load custom_tags %}
 
 {% block title %}
-Новости
+Главная страница
 {% endblock title %}
 
 {% block content %}
-<!--Информация пользователя-->
+<!--Информация о пользователе-->
 <h2>Авторизован как {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя</div>
 <button><a href="sign/logout/">Выйти</a></button>
 
 <!--Кнопки для создания новостей-->
-{% if is_not_author %}
+{% if is_not_author %}  <!-- is_not_author объявлена в get_context_data!!! -->
 <button><a href="sign/upgrade/"> Стать автором </a></button>
 {% else %}
 <button><a href="news/create/"> Написать новость </a></button>
 <button><a href="article/create/"> Написать статью </a></button>
 {% endif %}
 
-<!--Количество новостей на сайте-->
-<table>
-    <tbody>
-    <tr>
-        <td>Всего новостей:</td>
-        <td><em>{{ all_news|length }}</em></td>
-    </tr>
-    </tbody>
-</table>
-
-<!--Поиск по фильтру-->
-<h3>Поиск по фильтру</h3>
+<!--Поиск по фильтрам-->
+<h3>Поиск по фильтрам</h3>
 <form action="" method="get">
     {{ filterset.form.as_p }}
     <input type="submit" value="Найти"/>
 </form>
 
-<!--Подписка на отдельные категории-->
+<!--Список категорий-->
 <div class="col-md-4">
-    <h1>Категории</h1>
+    <h3>Категории</h3>
     <ul>
-        {% for category in categories %}    <!-- categories обозначена в get_context_data!!! -->
+        {% for category in categories %}    <!-- categories объявлена в get_context_data!!! -->
         <li>
-            <a href="?category={{ category.name }}">{{ category.name }}</a>
-
-            <form action="{% url 'news_subscribe' %}" method="post">
+            {{ category.name }}
+            <form action="{% url 'subscribe_to_category' %}" method="post"> <!-- Подписаться на категорию -->
                 {% csrf_token %}
                 <input type="hidden" name="category" value="{{ category.name }}">
-                <input type="submit" value="Подписаться на категорию"></input>
+                <input type="submit" value="Подписаться">
+            </form>
+            <form action="{% url 'unsubscribe_from_category' %}" method="post"> <!-- Отписаться от категории -->
+                {% csrf_token %}
+                <input type="hidden" name="category" value="{{ category.name }}">
+                <input type="submit" value="Отписаться">
             </form>
         </li>
         {% endfor %}
@@ -57,7 +51,7 @@
 </div>
 
 <!--Таблица всех новостей-->
-<h1>Актуальные новости</h1>
+<h1>Новости и статьи ( {{ all_news|length }} )</h1> <!--Количество новостей на сайте-->
 <hr>
 {% if news_list %}
 {% for n in news_list %}
@@ -74,7 +68,7 @@
 <footer>
     <section>
         Рейтинг новости {{ n.rating }} | Автор {{ n.author }} | Рейтинг автора {{ n.author.rating }} |
-        Дата публикации {{ n.datetime|date:'d.m.Y' }}
+        Дата публикации {{ n.datetime|date:'d.m.y' }}
     </section>
 </footer>
 <hr>

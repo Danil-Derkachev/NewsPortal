@@ -1,16 +1,23 @@
-from django_filters import FilterSet, ModelChoiceFilter, DateFilter, DateRangeFilter
+from django_filters import FilterSet, ModelChoiceFilter, DateFilter, CharFilter
 from .models import Post, Category
 
 
-# Создаем свой набор фильтров для модели Product.
-# FilterSet, который мы наследуем,
-# должен чем-то напомнить знакомые вам Django дженерики.
 class PostFilter(FilterSet):
     category = ModelChoiceFilter(
         field_name='postcategory__category',
         queryset=Category.objects.all(),
         label='Категории',
         empty_label='Все',
+    )
+    title = CharFilter(
+        field_name='title',
+        lookup_expr='icontains',
+        label='Заголовок содержит',
+    )
+    datetime = DateFilter(
+        field_name='datetime',
+        lookup_expr='gt',
+        label='Дата больше чем (ГГГГ-ММ-ДД)',
     )
 
     class Meta:
@@ -19,9 +26,4 @@ class PostFilter(FilterSet):
         model = Post
         # В fields мы описываем по каким полям модели
         # будет производиться фильтрация.
-        fields = {
-            # поиск по названию
-            'title': ['icontains'],
-            # позже указываемой даты
-            'datetime': ['gt']
-        }
+        fields = {}

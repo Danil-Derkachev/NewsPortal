@@ -9,40 +9,15 @@ OneNews
 {% endblock title %}
 
 {% block content %}
-<table>
-<tbody>
-<tr>
-<td>
-<h1>Заголовок</h1>
-</td>
-</tr>
-<tr>
-<td>
-<h2>{{one_news.title}}</h2>
-</td>
-</tr>
-<tr>
-<td>
-<h1>Текст</h1>
-</td>
-</tr>
-<tr>
-<td>
-<h4 style="text-align: left;">{{one_news.text|censor}}</h4>
-</td>
-</tr>
-<tr>
-<td>
-<h3>Дата</h3>
-</td>
-</tr>
-<tr>
-<td>
-<h4>{{one_news.datetime}}</h4>
-</td>
-</tr>
-</tbody>
-</table>
-
+<header>
+    <h3>{{one_news.title}}</h3>
+</header>
+<main>
+    <p style="text-align: left;">{{one_news.text|censor}}</p>
+</main>
+<footer>
+    Рейтинг новости {{ one_news.rating }} | Автор {{ one_news.author }} | Рейтинг автора {{ one_news.author.rating }} |
+    Дата публикации {{ one_news.datetime|date:'d.m.Y' }}
+</footer>
 <button><a href="{{ one_news.get_absolute_url }}/edit">Редактировать</a></button>
 {% endblock content %}
