@@ -130,3 +130,17 @@ def unsubscribe_from_category(request):
         return redirect('news_list')
     else:
         return redirect('news_list')
+
+
+def like_post(request, **kwargs):
+    for name, value in kwargs.items():
+        post = Post.objects.get(id=value)
+        post.like()
+    return redirect(post.get_absolute_url())
+
+
+def dislike_post(request, **kwargs):
+    for name, value in kwargs.items():
+        post = Post.objects.get(id=value)
+        post.dislike()
+    return redirect(post.get_absolute_url())
