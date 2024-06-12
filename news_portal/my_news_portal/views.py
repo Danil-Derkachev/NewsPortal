@@ -133,6 +133,7 @@ def unsubscribe_from_category(request):
 
 
 def like_post(request, **kwargs):
+    """Повышает рейтинг новости или статьи на единицу"""
     for name, value in kwargs.items():
         post = Post.objects.get(id=value)
         post.like()
@@ -140,6 +141,7 @@ def like_post(request, **kwargs):
 
 
 def dislike_post(request, **kwargs):
+    """Понижает рейтинг новости или статьи на единицу"""
     for name, value in kwargs.items():
         post = Post.objects.get(id=value)
         post.dislike()

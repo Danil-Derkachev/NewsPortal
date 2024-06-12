@@ -20,6 +20,7 @@ OneNews
     Дата публикации {{ one_news.datetime|date:'d.m.Y' }}
 </footer>
 <button><a href="{{ one_news.get_absolute_url }}/edit">Редактировать</a></button>
+<button><a href="{{ one_news.get_absolute_url }}/delete">Удалить</a></button>
 <button><a href="{{ one_news.get_absolute_url }}/like">Нравится</a></button>
 <button><a href="{{ one_news.get_absolute_url }}/dislike">Не нравится</a></button>
 {% endblock content %}
