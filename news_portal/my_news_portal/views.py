@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -10,6 +12,9 @@ from .models import *
 from .tasks import *
 
 
+logger = logging.getLogger(__name__)
+
+
 class NewsList(LoginRequiredMixin, ListView):
     """ Отображение всех новостей и статей """
     model = Post
@@ -18,10 +23,12 @@ class NewsList(LoginRequiredMixin, ListView):
     context_object_name = 'news_list'
     paginate_by = 10
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,6 +44,7 @@ class OneNewsDetail(DetailView):
     model = Post
     template_name = 'one_news.html'
     context_object_name = 'one_news'
+
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
         obj = cache.get(f'one_news-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
@@ -55,6 +63,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     model = Post
     # и новый шаблон, в котором используется форма.
     template_name = 'create_news.html'
+
 
     def form_valid(self, form):
         post = form.save()#(commit=False)
@@ -86,6 +95,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     template_name = 'create_article.html'
+
 
     def form_valid(self, form):
         post = form.save(commit=False)

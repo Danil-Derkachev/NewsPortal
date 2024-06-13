@@ -2,3 +2,4 @@
 /venv
 /simple_signup
 .env
+/news_portal/logs
