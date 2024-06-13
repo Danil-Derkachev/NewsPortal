@@ -220,6 +220,16 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'style' : '{',
+
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+
     'formatters': {
         'simple': {
             'format': '%(asctime)s %(levelname)s %(message)s'
@@ -241,15 +251,6 @@ LOGGING = {
         },
         'mail_admins': {
             'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s'
-        },
-    },
-
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
         },
     },
 

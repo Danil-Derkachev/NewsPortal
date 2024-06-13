@@ -25,6 +25,7 @@ class NewsList(LoginRequiredMixin, ListView):
 
 
     def get_queryset(self):
+        logger.error("Hello! I'm error in your app. Enjoy:)")
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
