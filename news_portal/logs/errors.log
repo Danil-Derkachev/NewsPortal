@@ -57,3 +57,185 @@ Traceback (most recent call last):
     raise new from exc
 django.template.exceptions.TemplateDoesNotExist: main.html
 2024-06-14 16:33:45,706 ERROR "GET /sign/logout/ HTTP/1.1" 500 137042 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 18:50:45,393 ERROR Internal Server Error: /news/2/create_comment/ C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'django.core.exceptions.ImproperlyConfigured'>, ImproperlyConfigured('CommentCreate is missing the permission_required attribute. Define CommentCreate.permission_required, or override CommentCreate.get_permission_required().'), <traceback object at 0x0000019CB10D6880>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 107, in dispatch
+    if not self.has_permission():
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 103, in has_permission
+    perms = self.get_permission_required()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 87, in get_permission_required
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: CommentCreate is missing the permission_required attribute. Define CommentCreate.permission_required, or override CommentCreate.get_permission_required().
+2024-06-14 18:50:45,396 ERROR "GET /news/2/create_comment/ HTTP/1.1" 500 87412 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 18:52:43,708 ERROR Internal Server Error: /news/2/create_comment/ C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'django.db.utils.IntegrityError'>, IntegrityError('ОШИБКА:  значение NULL в столбце "post_id" отношения "my_news_portal_comment" нарушает ограничение NOT NULL\nDETAIL:  Ошибочная строка содержит (1, comment, 2024-06-14 15:52:43.261223+00, 0, null, null).\n'), <traceback object at 0x000002B3A8E3FF80>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+psycopg2.errors.NotNullViolation: ОШИБКА:  значение NULL в столбце "post_id" отношения "my_news_portal_comment" нарушает ограничение NOT NULL
+DETAIL:  Ошибочная строка содержит (1, comment, 2024-06-14 15:52:43.261223+00, 0, null, null).
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 153, in post
+    return self.form_valid(form)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 135, in form_valid
+    self.object = form.save()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\forms\models.py", line 542, in save
+    self.instance.save()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+django.db.utils.IntegrityError: ОШИБКА:  значение NULL в столбце "post_id" отношения "my_news_portal_comment" нарушает ограничение NOT NULL
+DETAIL:  Ошибочная строка содержит (1, comment, 2024-06-14 15:52:43.261223+00, 0, null, null).
+
+2024-06-14 18:52:43,716 ERROR "POST /news/2/create_comment/ HTTP/1.1" 500 169992 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:05:17,298 ERROR Internal Server Error: /news/2/create_comment/ C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'django.core.exceptions.ImproperlyConfigured'>, ImproperlyConfigured('No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.'), <traceback object at 0x0000019FFD6B7240>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 125, in get_success_url
+    url = self.object.get_absolute_url()
+AttributeError: 'Comment' object has no attribute 'get_absolute_url'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 153, in post
+    return self.form_valid(form)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 136, in form_valid
+    return super().form_valid(form)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 65, in form_valid
+    return HttpResponseRedirect(self.get_success_url())
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\edit.py", line 127, in get_success_url
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: No URL to redirect to.  Either provide a url or define a get_absolute_url method on the Model.
+2024-06-14 19:05:17,303 ERROR "POST /news/2/create_comment/ HTTP/1.1" 500 105710 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:53:56,755 ERROR Internal Server Error: /news/2 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'context' is not defined"), <traceback object at 0x00000278CF1CD4C0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 62, in get_context_data
+    context['comments'] = Comment.objects.all()
+NameError: name 'context' is not defined
+2024-06-14 19:53:56,758 ERROR "GET /news/2 HTTP/1.1" 500 87485 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:56:02,020 ERROR Internal Server Error: /news/2 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'OneNewsDetail' object has no attribute 'post'"), <traceback object at 0x000001A79F7ABEC0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 63, in get_context_data
+    context['comments'] = Comment.objects.filter(post=self.post.id)
+AttributeError: 'OneNewsDetail' object has no attribute 'post'
+2024-06-14 19:56:02,022 ERROR "GET /news/2 HTTP/1.1" 500 88475 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:56:29,834 ERROR Internal Server Error: /news/2 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'OneNewsDetail' object has no attribute 'id'"), <traceback object at 0x00000179EFB829C0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 63, in get_context_data
+    context['comments'] = Comment.objects.filter(post=self.id)
+AttributeError: 'OneNewsDetail' object has no attribute 'id'
+2024-06-14 19:56:29,837 ERROR "GET /news/2 HTTP/1.1" 500 88457 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:56:53,481 ERROR Internal Server Error: /news/2 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'WSGIRequest' object has no attribute 'id'"), <traceback object at 0x0000023C9646B480>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 63, in get_context_data
+    context['comments'] = Comment.objects.filter(post=self.request.id)
+AttributeError: 'WSGIRequest' object has no attribute 'id'
+2024-06-14 19:56:53,485 ERROR "GET /news/2 HTTP/1.1" 500 88465 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-14 19:57:17,643 ERROR Internal Server Error: /news/2 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'WSGIRequest' object has no attribute 'pk'"), <traceback object at 0x0000018116230CC0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 63, in get_context_data
+    context['comments'] = Comment.objects.filter(post=self.request.pk)
+AttributeError: 'WSGIRequest' object has no attribute 'pk'
+2024-06-14 19:57:17,646 ERROR "GET /news/2 HTTP/1.1" 500 88465 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None

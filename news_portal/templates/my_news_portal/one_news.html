@@ -23,4 +23,15 @@ OneNews
 <button><a href="{{ one_news.get_absolute_url }}/delete">Удалить</a></button>
 <button><a href="{{ one_news.get_absolute_url }}/like">Нравится</a></button>
 <button><a href="{{ one_news.get_absolute_url }}/dislike">Не нравится</a></button>
+<button><a href="{{ one_news.get_absolute_url }}/create_comment">Написать комментарий</a></button>
+<h3>Комментарии ( {{ comments|length }} )</h3>
+<hr>
+{% for comment in comments %}
+{{ comment.user.username }} | {{ comment.datetime|date:'d.m.y' }}
+<br>
+{{ comment.text }}
+<hr>
+{% empty %}
+<h4>Комментариев нет</h4>
+{% endfor %}
 {% endblock content %}

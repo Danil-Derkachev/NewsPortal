@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.core.cache import cache
 
 from .filters import PostFilter
-from .forms import NewsForm
+from .forms import NewsForm, CommentForm
 from .models import *
 from .tasks import *
 
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class NewsList(LoginRequiredMixin, ListView):
-    """ Отображение всех новостей и статей """
+    """ Список всех новостей и статей """
     model = Post
     ordering = '-datetime'  # Сортировка по дате (не по времени)
     template_name = 'my_news_portal/news_list.html'
@@ -25,16 +25,15 @@ class NewsList(LoginRequiredMixin, ListView):
 
 
     def get_queryset(self):
-        logger.debug("Hello! I'm debug in your app. Enjoy:)")
-        logger.info("Hello! I'm info in your app. Enjoy:)")
-        logger.warning("Hello! I'm warning in your app. Enjoy:)")
-        logger.error("Hello! I'm error in your app. Enjoy:)")
-        logger.critical("Hello! I'm critical in your app. Enjoy:)")
+        # logger.debug("Hello! I'm debug in your app. Enjoy:)")
+        # logger.info("Hello! I'm info in your app. Enjoy:)")
+        # logger.warning("Hello! I'm warning in your app. Enjoy:)")
+        # logger.error("Hello! I'm error in your app. Enjoy:)")
+        # logger.critical("Hello! I'm critical in your app. Enjoy:)")
 
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,19 +45,23 @@ class NewsList(LoginRequiredMixin, ListView):
 
 
 class OneNewsDetail(DetailView):
-    """ Отображение отдельно взятой новости или статьи """
+    """ Отдельно взятая новость или статья """
     model = Post
     template_name = 'my_news_portal/one_news.html'
     context_object_name = 'one_news'
 
-
-    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+    def get_object(self, *args, **kwargs):
         obj = cache.get(f'one_news-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
         # если объекта нет в кэше, то получаем его и записываем в кэш
         if not obj:
             obj = super().get_object(queryset=self.queryset)
             cache.set(f'one_news-{self.kwargs["pk"]}', obj)
         return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
+        return context
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
@@ -69,7 +72,6 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     model = Post
     # и новый шаблон, в котором используется форма.
     template_name = 'my_news_portal/create_news.html'
-
 
     def form_valid(self, form):
         post = form.save()#(commit=False)
@@ -102,7 +104,6 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     model = Post
     template_name = 'my_news_portal/create_article.html'
 
-
     def form_valid(self, form):
         post = form.save(commit=False)
         post.type = 'AR'
@@ -124,6 +125,16 @@ class ArticleDelete(DeleteView):
     model = Post
     template_name = 'my_news_portal/delete_article.html'
     success_url = reverse_lazy('news_list')
+
+
+class CommentCreate(CreateView):
+    """ Создание комментария к новости или статье """
+    #permission_required = ('my_news_portal.add_post',)
+    # Указываем нашу разработанную форму
+    form_class = CommentForm
+    model = Comment
+    # и новый шаблон, в котором используется форма.
+    template_name = 'my_news_portal/create_comment.html'
 
 
 def subscribe_to_category(request):
