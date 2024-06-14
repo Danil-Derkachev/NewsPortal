@@ -120,3 +120,6 @@ class Comment(SomeBaseModel):
 
     def __str__(self):
         return f'{self.user}: {self.text}'
+
+    def get_absolute_url(self):
+        return reverse('one_news', kwargs={'pk': self.post.id})
