@@ -19,7 +19,7 @@ class NewsList(LoginRequiredMixin, ListView):
     """ Отображение всех новостей и статей """
     model = Post
     ordering = '-datetime'  # Сортировка по дате (не по времени)
-    template_name = 'news_list.html'
+    template_name = 'my_news_portal/news_list.html'
     context_object_name = 'news_list'
     paginate_by = 10
 
@@ -48,7 +48,7 @@ class NewsList(LoginRequiredMixin, ListView):
 class OneNewsDetail(DetailView):
     """ Отображение отдельно взятой новости или статьи """
     model = Post
-    template_name = 'one_news.html'
+    template_name = 'my_news_portal/one_news.html'
     context_object_name = 'one_news'
 
 
@@ -68,7 +68,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     # и новый шаблон, в котором используется форма.
-    template_name = 'create_news.html'
+    template_name = 'my_news_portal/create_news.html'
 
 
     def form_valid(self, form):
@@ -85,13 +85,13 @@ class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     # и новый шаблон, в котором используется форма.
-    template_name = 'edit_news.html'
+    template_name = 'my_news_portal/edit_news.html'
 
 
 class NewsDelete(DeleteView):
     """ Удаление новости """
     model = Post
-    template_name = 'delete_news.html'
+    template_name = 'my_news_portal/delete_news.html'
     success_url = reverse_lazy('news_list')
 
 
@@ -100,7 +100,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('my_news_portal.add_post',)
     form_class = NewsForm
     model = Post
-    template_name = 'create_article.html'
+    template_name = 'my_news_portal/create_article.html'
 
 
     def form_valid(self, form):
@@ -116,13 +116,13 @@ class ArticleEdit(PermissionRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     # и новый шаблон, в котором используется форма.
-    template_name = 'edit_article.html'
+    template_name = 'my_news_portal/edit_article.html'
 
 
 class ArticleDelete(DeleteView):
     """ Удаление статьи """
     model = Post
-    template_name = 'delete_article.html'
+    template_name = 'my_news_portal/delete_article.html'
     success_url = reverse_lazy('news_list')
 
 
