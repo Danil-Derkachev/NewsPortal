@@ -86,7 +86,7 @@ class Post(SomeBaseModel):
         return self.rating > 0
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.id}: {self.title}'
 
     def get_absolute_url(self):
         return reverse('one_news', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
@@ -122,4 +122,4 @@ class Comment(SomeBaseModel):
         return f'{self.user}: {self.text}'
 
     def get_absolute_url(self):
-        return reverse('one_news', kwargs={'pk': self.post.id})
+        return reverse('comment_detail', kwargs={'pk': self.id})
