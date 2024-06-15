@@ -109,14 +109,34 @@ class Comment(SomeBaseModel):
     text = models.TextField()
     datetime = models.DateTimeField(default=timezone.now)
     rating = models.IntegerField(default=0)
+    already_like = models.BooleanField(default=False)
+    already_dislike = models.BooleanField(default=False)
 
     def like(self):
-        self.rating += 1
-        self.save()
+        if not self.already_like and not self.already_dislike:
+            self.rating += 1
+            self.already_like = True
+            self.save()
+        elif self.already_dislike:
+            self.rating += 2
+            self.already_like = True
+            self.already_dislike = False
+            self.save()
+        elif self.already_like:
+            pass
 
     def dislike(self):
-        self.rating -= 1
-        self.save()
+        if not self.already_like and not self.already_dislike:
+            self.rating -= 1
+            self.already_dislike = True
+            self.save()
+        elif self.already_like:
+            self.rating -= 2
+            self.already_dislike = True
+            self.already_like = False
+            self.save()
+        elif self.already_dislike:
+            pass
 
     def __str__(self):
         return f'{self.user}: {self.text}'
