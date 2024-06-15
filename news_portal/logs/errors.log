@@ -3325,3 +3325,184 @@ Traceback (most recent call last):
     raise TypeError("quote_from_bytes() expected bytes")
 TypeError: quote_from_bytes() expected bytes
 2024-06-15 20:27:08,571 ERROR "POST /news/comment/2/edit HTTP/1.1" 500 113672 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 20:54:17,376 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'django.template.exceptions.TemplateSyntaxError'>, TemplateSyntaxError("Could not parse the remainder: '*user_subscribes' from '*user_subscribes'"), <traceback object at 0x00000150C00F0400>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\smartif.py", line 179, in translate_token
+    op = OPERATORS[token]
+KeyError: '*user_subscribes'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\backends\django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 200, in compile_nodelist
+    return parser.parse()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\defaulttags.py", line 853, in do_for
+    nodelist_loop = parser.parse(
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 513, in parse
+    raise self.error(token, e)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\defaulttags.py", line 952, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\defaulttags.py", line 885, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\smartif.py", line 170, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\smartif.py", line 181, in translate_token
+    return self.create_var(token)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\defaulttags.py", line 888, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\template\base.py", line 703, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '*user_subscribes' from '*user_subscribes'
+2024-06-15 20:54:17,381 ERROR "GET / HTTP/1.1" 500 300489 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 20:55:14,437 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'TypeError'>, TypeError('print() argument after ** must be a mapping, not QuerySet'), <traceback object at 0x000001C7D43CC080>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 45, in get_context_data
+    print(**Subscriber.objects.filter(user=self.request.user).values_list('category__name'))
+TypeError: print() argument after ** must be a mapping, not QuerySet
+2024-06-15 20:55:14,447 ERROR "GET / HTTP/1.1" 500 93396 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 20:55:49,453 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'TypeError'>, TypeError('print() argument after ** must be a mapping, not QuerySet'), <traceback object at 0x0000022B48374AC0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 45, in get_context_data
+    print(**(Subscriber.objects.filter(user=self.request.user).values_list('category__name')))
+TypeError: print() argument after ** must be a mapping, not QuerySet
+2024-06-15 20:55:49,455 ERROR "GET / HTTP/1.1" 500 93400 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 21:03:03,053 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'tuple' object has no attribute 'split'"), <traceback object at 0x0000020714081E00>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 47, in get_context_data
+    user_subscribes.append(user_subscribe.split(','))
+AttributeError: 'tuple' object has no attribute 'split'
+2024-06-15 21:03:03,055 ERROR "GET / HTTP/1.1" 500 93802 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 21:04:58,325 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'NoneType' object has no attribute 'append'"), <traceback object at 0x000002D2B5F67880>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 48, in get_context_data
+    user_subscribes.append(name.split(','))
+AttributeError: 'NoneType' object has no attribute 'append'
+2024-06-15 21:04:58,328 ERROR "GET / HTTP/1.1" 500 93964 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 21:26:11,741 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'user_subscribes_obj' is not defined"), <traceback object at 0x000001AB30902300>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 45, in get_context_data
+    if user_subscribes_obj:  # Приходится проходиться циклами т.к. категории в подписках создаются в формате <QuerySet [('Спорт',), ('Наука',)]>
+NameError: name 'user_subscribes_obj' is not defined
+2024-06-15 21:26:11,744 ERROR "GET / HTTP/1.1" 500 93904 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-06-15 21:33:20,358 ERROR Internal Server Error: / C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\utils\log.py (<class 'AttributeError'>, AttributeError("'QuerySet' object has no attribute 'split'"), <traceback object at 0x00000137D8DF2EC0>)
+Traceback (most recent call last):
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\views\generic\list.py", line 174, in get
+    context = self.get_context_data()
+  File "C:\Users\79895\PycharmProjects\NewsPortalProject\news_portal\my_news_portal\views.py", line 53, in get_context_data
+    print(user_subscribes_list.split())
+AttributeError: 'QuerySet' object has no attribute 'split'
+2024-06-15 21:33:20,361 ERROR "GET / HTTP/1.1" 500 93891 C:\Users\79895\PycharmProjects\NewsPortalProject\venv\lib\site-packages\django\core\servers\basehttp.py None
