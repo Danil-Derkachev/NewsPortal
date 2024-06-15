@@ -33,16 +33,19 @@
     <h3>Категории</h3>
     {% for category in categories %}    <!-- categories объявлена в get_context_data!!! -->
     {{ category.name }}
+    {% if category.name not in user_subscribes %} <!--Если категории нет в подписках пользователя-->
     <form action="{% url 'subscribe_to_category' %}" method="post"> <!-- Подписаться на категорию -->
         {% csrf_token %}
         <input type="hidden" name="category" value="{{ category.name }}">
         <input type="submit" value="Подписаться">
     </form>
+    {% else %} <!--Если категория в подписках пользователя-->
     <form action="{% url 'unsubscribe_from_category' %}" method="post"> <!-- Отписаться от категории -->
         {% csrf_token %}
         <input type="hidden" name="category" value="{{ category.name }}">
         <input type="submit" value="Отписаться">
     </form>
+    {% endif %}
     {% endfor %}
 </div>
 

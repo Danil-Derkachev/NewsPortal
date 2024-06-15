@@ -41,6 +41,7 @@ class NewsList(LoginRequiredMixin, ListView):
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         context['categories'] = Category.objects.all()
         context['all_news'] = Post.objects.all()
+        context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__name', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
         return context
 
 
