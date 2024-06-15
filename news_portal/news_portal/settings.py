@@ -302,11 +302,11 @@ LOGGING = {
     },
 
     'loggers': {
-        'django': {
-            'handlers': ['console_debug', 'console_warning', 'console_error', 'general_log'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+        # 'django': {
+        #     'handlers': ['console_debug', 'console_warning', 'console_error', 'general_log'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # },
         'django.request': {
             'handlers': ['errors_log', 'mail_admins'],
             'level': 'ERROR',

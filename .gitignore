@@ -4,3 +4,4 @@
 .env
 /news_portal/appointment
 /news_portal/templates/appointment
+/news_portal/logs/

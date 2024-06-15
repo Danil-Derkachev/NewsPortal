@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.core.cache import cache
 
 from .filters import PostFilter
-from .forms import NewsForm, CommentForm
+from .forms import NewsForm, CommentForm, CommentEditForm
 from .models import *
 from .tasks import *
 
@@ -60,7 +60,7 @@ class OneNewsDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
+        context['comments'] = Comment.objects.filter(post=self.kwargs['pk']).order_by('-rating')
         return context
 
 
@@ -83,10 +83,8 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
 class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     """ Редактирование новости """
     permission_required = ('my_news_portal.change_post',)
-    # Указываем нашу разработанную форму
     form_class = NewsForm
     model = Post
-    # и новый шаблон, в котором используется форма.
     template_name = 'my_news_portal/edit_news.html'
 
 
@@ -129,12 +127,42 @@ class ArticleDelete(DeleteView):
 
 class CommentCreate(CreateView):
     """ Создание комментария к новости или статье """
-    #permission_required = ('my_news_portal.add_post',)
-    # Указываем нашу разработанную форму
     form_class = CommentForm
     model = Comment
-    # и новый шаблон, в котором используется форма.
     template_name = 'my_news_portal/create_comment.html'
+
+    def get_success_url(self):
+        """Перенаправление после успешного создания комментария"""
+        success_url = reverse('one_news', args=[self.request.POST["post"]])
+        return success_url
+
+
+class CommentDetail(DeleteView):
+    """Отдельно взятый комментарий"""
+    model = Comment
+
+
+class CommentEdit(UpdateView):
+    """Редактирование комментария"""
+    form_class = CommentEditForm
+    model = Comment
+    template_name = 'my_news_portal/edit_comment.html'
+
+    def get_success_url(self):
+        """Перенаправление после успешного редактирования комментария"""
+        success_url = reverse('one_news', args=[self.request.POST["post"]])
+        return success_url
+
+
+class CommentDelete(DeleteView):
+    """ Удаление комментария """
+    model = Comment
+    template_name = 'my_news_portal/delete_comment.html'
+
+    def get_success_url(self):
+        """Перенаправление после успешного удаления комментария"""
+        success_url = reverse('one_news', args=[self.request.GET["post_id"]])
+        return success_url
 
 
 def subscribe_to_category(request):
@@ -161,15 +189,27 @@ def unsubscribe_from_category(request):
 
 def like_post(request, **kwargs):
     """Повышает рейтинг новости или статьи на единицу"""
-    for name, value in kwargs.items():
-        post = Post.objects.get(id=value)
-        post.like()
+    post = Post.objects.get(id=kwargs['pk'])
+    post.like()
     return redirect(post.get_absolute_url())
 
 
 def dislike_post(request, **kwargs):
     """Понижает рейтинг новости или статьи на единицу"""
-    for name, value in kwargs.items():
-        post = Post.objects.get(id=value)
-        post.dislike()
+    post = Post.objects.get(id=kwargs['pk'])
+    post.dislike()
     return redirect(post.get_absolute_url())
+
+
+def like_comment(request, **kwargs):
+    """Повышает рейтинг комментария на единицу"""
+    comment_obj = Comment.objects.get(id=request.POST['comment_id'])
+    comment_obj.like()
+    return redirect('one_news', comment_obj.post.id)
+
+
+def dislike_comment(request, **kwargs):
+    """Понижает рейтинг комментария на единицу"""
+    comment_obj = Comment.objects.get(id=request.POST['comment_id'])
+    comment_obj.dislike()
+    return redirect('one_news', comment_obj.post.id)
