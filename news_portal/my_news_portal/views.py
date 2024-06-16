@@ -205,12 +205,32 @@ def dislike_post(request, **kwargs):
 def like_comment(request, **kwargs):
     """Повышает рейтинг комментария на единицу"""
     comment_obj = Comment.objects.get(id=request.POST['comment_id'])
-    comment_obj.like()
+    user_liked_comment = LikedComment.objects.filter(user=request.user.id, comment=comment_obj)
+    user_disliked_comment = DislikedComment.objects.filter(user=request.user.id, comment=comment_obj)
+    if not user_liked_comment and not user_disliked_comment:  # Если пользователь ещё не лайкал и не дизлайкал комментарий
+        comment_obj.like()
+        LikedComment.objects.create(user=request.user, comment=comment_obj)
+    elif user_liked_comment:  # Если уже лайкал
+        pass
+    elif not user_liked_comment and user_disliked_comment:  # Если уже дизлайкал
+        comment_obj.like(2)
+        LikedComment.objects.create(user=request.user, comment=comment_obj)
+        DislikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
     return redirect('one_news', comment_obj.post.id)
 
 
 def dislike_comment(request, **kwargs):
     """Понижает рейтинг комментария на единицу"""
     comment_obj = Comment.objects.get(id=request.POST['comment_id'])
-    comment_obj.dislike()
+    user_liked_comment = LikedComment.objects.filter(user=request.user.id, comment=comment_obj)
+    user_disliked_comment = DislikedComment.objects.filter(user=request.user.id, comment=comment_obj)
+    if not user_liked_comment and not user_disliked_comment:  # Если пользователь ещё не лайкал и не дизлайкал комментарий
+        comment_obj.dislike()
+        DislikedComment.objects.create(user=request.user, comment=comment_obj)
+    elif user_disliked_comment:  # Если уже дизлайкал
+        pass
+    elif user_liked_comment and not user_disliked_comment:  #  Если уже лайкал
+        comment_obj.dislike(2)
+        DislikedComment.objects.create(user=request.user, comment=comment_obj)
+        LikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
     return redirect('one_news', comment_obj.post.id)
