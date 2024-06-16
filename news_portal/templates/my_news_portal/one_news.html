@@ -1,6 +1,5 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
-<!-- Подключаем новый файл с нашим тегом -->
+
 {% load custom_tags %}
 {% load custom_filters %}
 
@@ -20,11 +19,25 @@ OneNews
     Рейтинг новости {{ one_news.rating }} | Автор {{ one_news.author }} | Рейтинг автора {{ one_news.author.rating }} |
     Дата публикации {{ one_news.datetime|date:'d.m.Y' }}
 </footer>
-<button><a href="{{ one_news.get_absolute_url }}/edit">Редактировать</a></button>
-<button><a href="{{ one_news.get_absolute_url }}/delete">Удалить</a></button>
-<button><a href="{{ one_news.get_absolute_url }}/like">Нравится</a></button>
-<button><a href="{{ one_news.get_absolute_url }}/dislike">Не нравится</a></button>
-<form action="{% url 'create_comment' %}" method="post">   <!--Создать комментарий-->
+<form action="{% url 'like_post' one_news.id %}" method="post">  <!--Лайкнуть публикацию-->
+    {% csrf_token %}
+    <input type="hidden" name="one_news_id" value="{{ one_news.id }}">
+    <input type="submit" value="Нравится">
+</form>
+<form action="{% url 'dislike_post' one_news.id %}" method="post">  <!--Дизлайкнуть публикацию-->
+    {% csrf_token %}
+    <input type="hidden" name="one_news_id" value="{{ one_news.id }}">
+    <input type="submit" value="Не нравится">
+</form>
+<form action="{% url 'edit_news' one_news.id %}" method="get">  <!--Редактировать публикацию-->
+    {% csrf_token %}
+    <input type="submit" value="Редактировать">
+</form>
+<form action="{% url 'delete_news' one_news.id %}" method="get">  <!--Удалить публикацию-->
+    {% csrf_token %}
+    <input type="submit" value="Удалить">
+</form>
+<form action="{% url 'create_comment' %}" method="get">   <!--Создать комментарий-->
     {% csrf_token %}
     <input type="submit" value="Написать комментарий">
 </form>
@@ -48,7 +61,7 @@ OneNews
     <input type="hidden" name="comment_id" value="{{ comment.id }}">
     <input type="submit" value="Не нравится">
 </form>
-<form action="{% url 'edit_comment' comment.id %}" method="post">   <!--Редактировать комментарий-->
+<form action="{% url 'edit_comment' comment.id %}" method="get">   <!--Редактировать комментарий-->
     {% csrf_token %}
     <input type="submit" value="Редактировать">
 </form>

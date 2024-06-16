@@ -30,7 +30,7 @@ class PostCategoryAdmin(admin.ModelAdmin):
 admin.site.register(PostCategory, PostCategoryAdmin)
 
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):  #FIXME AttributeError at /admin/my_news_portal/comment/  Unable to lookup 'likedcomment' on Comment or CommentAdmin
     list_display = [field.name for field in Comment._meta.get_fields()]
 admin.site.register(Comment, CommentAdmin)
 
@@ -51,10 +51,11 @@ class DislikedCommentAdmin(admin.ModelAdmin):
 admin.site.register(DislikedComment, DislikedCommentAdmin)
 
 
-# admin.site.register(Author, AuthorAdmin)
-# admin.site.register(Category, CategoryAdmin)
-# admin.site.register(Post, PostAdmin)
-# admin.site.register(PostCategory, PostCategoryAdmin)
-# admin.site.register(Comment, CommentAdmin)
-# admin.site.register(Subscriber, SubscriberAdmin)
-# admin.site.register(LikedComment, LikedCommentAdmin)
+class LikedPostAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in LikedPost._meta.get_fields()]
+admin.site.register(LikedPost, LikedPostAdmin)
+
+
+class DislikedPostAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in DislikedPost._meta.get_fields()]
+admin.site.register(DislikedPost, DislikedPostAdmin)

@@ -45,7 +45,7 @@ class NewsList(LoginRequiredMixin, ListView):
         return context
 
 
-class OneNewsDetail(DetailView):
+class NewsDetail(DetailView):
     """ Отдельно взятая новость или статья """
     model = Post
     template_name = 'my_news_portal/one_news.html'
@@ -190,16 +190,36 @@ def unsubscribe_from_category(request):
 
 def like_post(request, **kwargs):
     """Повышает рейтинг новости или статьи на единицу"""
-    post = Post.objects.get(id=kwargs['pk'])
-    post.like()
-    return redirect(post.get_absolute_url())
+    post_obj = Post.objects.get(id=request.POST['one_news_id'])
+    user_liked_post = LikedPost.objects.filter(user=request.user.id, post=post_obj)
+    user_disliked_post = DislikedPost.objects.filter(user=request.user.id, post=post_obj)
+    if not user_liked_post and not user_disliked_post:  # Если пользователь ещё не лайкал и не дизлайкал публикацию
+        post_obj.like()
+        LikedPost.objects.create(user=request.user, post=post_obj)
+    elif user_liked_post:  # Если уже лайкал
+        pass
+    elif not user_liked_post and user_disliked_post:  # Если уже дизлайкал
+        post_obj.like(2)
+        LikedPost.objects.create(user=request.user, post=post_obj)
+        DislikedPost.objects.filter(user=request.user, post=post_obj).delete()
+    return redirect('one_news', post_obj.id)
 
 
 def dislike_post(request, **kwargs):
     """Понижает рейтинг новости или статьи на единицу"""
-    post = Post.objects.get(id=kwargs['pk'])
-    post.dislike()
-    return redirect(post.get_absolute_url())
+    post_obj = Post.objects.get(id=request.POST['one_news_id'])
+    user_liked_post = LikedPost.objects.filter(user=request.user.id, post=post_obj)
+    user_disliked_post = DislikedPost.objects.filter(user=request.user.id, post=post_obj)
+    if not user_liked_post and not user_disliked_post:  # Если пользователь ещё не лайкал и не дизлайкал публикацию
+        post_obj.dislike()
+        DislikedPost.objects.create(user=request.user, post=post_obj)
+    elif user_disliked_post:  # Если уже дизлайкал
+        pass
+    elif user_liked_post and not user_disliked_post:  # Если уже лайкал
+        post_obj.dislike(2)
+        DislikedPost.objects.create(user=request.user, post=post_obj)
+        LikedPost.objects.filter(user=request.user, post=post_obj).delete()
+    return redirect('one_news', post_obj.id)
 
 
 def like_comment(request, **kwargs):
