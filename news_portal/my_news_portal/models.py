@@ -41,6 +41,7 @@ class Author(SomeBaseModel):
 
 class Category(SomeBaseModel):
     name = models.CharField(max_length=255, unique=True)
+
     def __str__(self):
         return f'{self.name}'
 
@@ -89,11 +90,11 @@ class Post(SomeBaseModel):
         return f'{self.id}: {self.title}'
 
     def get_absolute_url(self):
-        return reverse('one_news', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
+        return reverse('detail_post', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
-        cache.delete(f'one_news-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
+        cache.delete(f'detail_post-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
 
 
 class PostCategory(SomeBaseModel):
@@ -139,7 +140,7 @@ class Comment(SomeBaseModel):
         return f'{self.user}: {self.text}'
 
     def get_absolute_url(self):
-        return reverse('comment_detail', kwargs={'pk': self.id})
+        return reverse('detail_comment', kwargs={'pk': self.id})
 
 
 class LikedComment(SomeBaseModel):

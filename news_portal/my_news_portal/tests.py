@@ -4,8 +4,8 @@ from rest_framework import status
 
 
 class TestMyNewsPortal(TestCase):
-    def test_news_list(self):
-        response = self.client.get(reverse('news_list'))
+    def test_list_posts(self):
+        response = self.client.get(reverse('list_posts'))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
 

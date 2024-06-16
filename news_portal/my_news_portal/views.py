@@ -15,22 +15,16 @@ from .tasks import *
 logger = logging.getLogger(__name__)
 
 
-class NewsList(LoginRequiredMixin, ListView):
-    """ Список всех новостей и статей """
+class PostsList(LoginRequiredMixin, ListView):
+    """Список всех публикаций"""
     model = Post
     ordering = '-datetime'  # Сортировка по дате (не по времени)
-    template_name = 'my_news_portal/news_list.html'
-    context_object_name = 'news_list'
+    template_name = 'my_news_portal/list_posts.html'
+    context_object_name = 'list_posts'
     paginate_by = 10
 
 
     def get_queryset(self):
-        # logger.debug("Hello! I'm debug in your app. Enjoy:)")
-        # logger.info("Hello! I'm info in your app. Enjoy:)")
-        # logger.warning("Hello! I'm warning in your app. Enjoy:)")
-        # logger.error("Hello! I'm error in your app. Enjoy:)")
-        # logger.critical("Hello! I'm critical in your app. Enjoy:)")
-
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
@@ -40,23 +34,23 @@ class NewsList(LoginRequiredMixin, ListView):
         context['filterset'] = self.filterset
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         context['categories'] = Category.objects.all()
-        context['all_news'] = Post.objects.all()
-        context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__name', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
+        context['posts'] = Post.objects.all()
+        context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
         return context
 
 
-class NewsDetail(DetailView):
-    """ Отдельно взятая новость или статья """
+class PostDetail(DetailView):
+    """Отдельно взятая публикация"""
     model = Post
-    template_name = 'my_news_portal/one_news.html'
-    context_object_name = 'one_news'
+    template_name = 'my_news_portal/detail_post.html'
+    context_object_name = 'detail_post'
 
     def get_object(self, *args, **kwargs):
-        obj = cache.get(f'one_news-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+        obj = cache.get(f'detail_post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
         # если объекта нет в кэше, то получаем его и записываем в кэш
         if not obj:
             obj = super().get_object(queryset=self.queryset)
-            cache.set(f'one_news-{self.kwargs["pk"]}', obj)
+            cache.set(f'detail_post-{self.kwargs["pk"]}', obj)
         return obj
 
     def get_context_data(self, **kwargs):
@@ -66,7 +60,7 @@ class NewsDetail(DetailView):
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
-    """ Создание новости """
+    """Создание новости"""
     permission_required = ('my_news_portal.add_post',)
     # Указываем нашу разработанную форму
     form_class = NewsForm
@@ -81,23 +75,23 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NewsEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
-    """ Редактирование новости """
+class PostEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+    """Редактирование публикации"""
     permission_required = ('my_news_portal.change_post',)
     form_class = NewsForm
     model = Post
-    template_name = 'my_news_portal/edit_news.html'
+    template_name = 'my_news_portal/edit_post.html'
 
 
-class NewsDelete(DeleteView):
-    """ Удаление новости """
+class PostDelete(DeleteView):
+    """Удаление публикации"""
     model = Post
-    template_name = 'my_news_portal/delete_news.html'
-    success_url = reverse_lazy('news_list')
+    template_name = 'my_news_portal/delete_post.html'
+    success_url = reverse_lazy('list_posts')
 
 
 class ArticleCreate(PermissionRequiredMixin, CreateView):
-    """ Создание статьи """
+    """Создание статьи"""
     permission_required = ('my_news_portal.add_post',)
     form_class = NewsForm
     model = Post
@@ -109,38 +103,16 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ArticleEdit(PermissionRequiredMixin, UpdateView):
-    """ Редактирование статьи """
-    permission_required = ('my_news_portal.change_post',)
-    # Указываем нашу разработанную форму
-    form_class = NewsForm
-    model = Post
-    # и новый шаблон, в котором используется форма.
-    template_name = 'my_news_portal/edit_article.html'
-
-
-class ArticleDelete(DeleteView):
-    """ Удаление статьи """
-    model = Post
-    template_name = 'my_news_portal/delete_article.html'
-    success_url = reverse_lazy('news_list')
-
-
 class CommentCreate(CreateView):
-    """ Создание комментария к новости или статье """
+    """Создание комментария к публикации"""
     form_class = CommentForm
     model = Comment
     template_name = 'my_news_portal/create_comment.html'
 
     def get_success_url(self):
         """Перенаправление после успешного создания комментария"""
-        success_url = reverse('one_news', args=[self.request.POST["post"]])
+        success_url = reverse('detail_post', args=[self.request.POST["post"]])
         return success_url
-
-
-class CommentDetail(DeleteView):
-    """Отдельно взятый комментарий"""
-    model = Comment
 
 
 class CommentEdit(UpdateView):
@@ -151,46 +123,46 @@ class CommentEdit(UpdateView):
 
     def get_success_url(self):
         """Перенаправление после успешного редактирования комментария"""
-        success_url = reverse('one_news', args=[self.request.POST["post"]])
+        success_url = reverse('detail_post', args=[self.request.GET["post_id"]])
         return success_url
 
 
 class CommentDelete(DeleteView):
-    """ Удаление комментария """
+    """Удаление комментария"""
     model = Comment
     template_name = 'my_news_portal/delete_comment.html'
 
     def get_success_url(self):
         """Перенаправление после успешного удаления комментария"""
-        success_url = reverse('one_news', args=[self.request.GET["post_id"]])
+        success_url = reverse('detail_post', args=[self.request.GET["post_id"]])
         return success_url
 
 
-def subscribe_to_category(request):
+def subscribe_to_category(request, **kwargs):
     """Подписка на категорию"""
-    category_obj = Category.objects.get(name=request.POST['category'])
-    sub_obj = Subscriber.objects.filter(user=request.user, category=category_obj)
+    sub_obj = Subscriber.objects.filter(user=request.user, category=kwargs['pk'])
     if not sub_obj:
+        category_obj = Category.objects.get(id=kwargs['pk'])
         Subscriber.objects.create(user=request.user, category=category_obj)
-        return redirect('news_list')
+        return redirect('list_posts')
     else:
-        return redirect('news_list')
+        return redirect('list_posts')
 
 
-def unsubscribe_from_category(request):
+def unsubscribe_from_category(request, **kwargs):
     """Отписка от категории"""
-    category_obj = Category.objects.get(name=request.POST['category'])
-    sub_obj = Subscriber.objects.filter(user=request.user, category=category_obj)
+    sub_obj = Subscriber.objects.filter(user=request.user, category=kwargs['pk'])
     if sub_obj:
+        category_obj = Category.objects.get(id=kwargs['pk'])
         Subscriber.objects.filter(user=request.user, category=category_obj).delete()
-        return redirect('news_list')
+        return redirect('list_posts')
     else:
-        return redirect('news_list')
+        return redirect('list_posts')
 
 
 def like_post(request, **kwargs):
-    """Повышает рейтинг новости или статьи на единицу"""
-    post_obj = Post.objects.get(id=request.POST['one_news_id'])
+    """Повышает рейтинг публикации на единицу"""
+    post_obj = Post.objects.get(id=kwargs['pk'])
     user_liked_post = LikedPost.objects.filter(user=request.user.id, post=post_obj)
     user_disliked_post = DislikedPost.objects.filter(user=request.user.id, post=post_obj)
     if not user_liked_post and not user_disliked_post:  # Если пользователь ещё не лайкал и не дизлайкал публикацию
@@ -202,12 +174,12 @@ def like_post(request, **kwargs):
         post_obj.like(2)
         LikedPost.objects.create(user=request.user, post=post_obj)
         DislikedPost.objects.filter(user=request.user, post=post_obj).delete()
-    return redirect('one_news', post_obj.id)
+    return redirect('detail_post', post_obj.id)
 
 
 def dislike_post(request, **kwargs):
-    """Понижает рейтинг новости или статьи на единицу"""
-    post_obj = Post.objects.get(id=request.POST['one_news_id'])
+    """Понижает рейтинг публикации на единицу"""
+    post_obj = Post.objects.get(id=kwargs['pk'])
     user_liked_post = LikedPost.objects.filter(user=request.user.id, post=post_obj)
     user_disliked_post = DislikedPost.objects.filter(user=request.user.id, post=post_obj)
     if not user_liked_post and not user_disliked_post:  # Если пользователь ещё не лайкал и не дизлайкал публикацию
@@ -219,12 +191,12 @@ def dislike_post(request, **kwargs):
         post_obj.dislike(2)
         DislikedPost.objects.create(user=request.user, post=post_obj)
         LikedPost.objects.filter(user=request.user, post=post_obj).delete()
-    return redirect('one_news', post_obj.id)
+    return redirect('detail_post', post_obj.id)
 
 
 def like_comment(request, **kwargs):
     """Повышает рейтинг комментария на единицу"""
-    comment_obj = Comment.objects.get(id=request.POST['comment_id'])
+    comment_obj = Comment.objects.get(id=kwargs['pk'])
     user_liked_comment = LikedComment.objects.filter(user=request.user.id, comment=comment_obj)
     user_disliked_comment = DislikedComment.objects.filter(user=request.user.id, comment=comment_obj)
     if not user_liked_comment and not user_disliked_comment:  # Если пользователь ещё не лайкал и не дизлайкал комментарий
@@ -236,12 +208,12 @@ def like_comment(request, **kwargs):
         comment_obj.like(2)
         LikedComment.objects.create(user=request.user, comment=comment_obj)
         DislikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
-    return redirect('one_news', comment_obj.post.id)
+    return redirect('detail_post', comment_obj.post.id)
 
 
 def dislike_comment(request, **kwargs):
     """Понижает рейтинг комментария на единицу"""
-    comment_obj = Comment.objects.get(id=request.POST['comment_id'])
+    comment_obj = Comment.objects.get(id=kwargs['pk'])
     user_liked_comment = LikedComment.objects.filter(user=request.user.id, comment=comment_obj)
     user_disliked_comment = DislikedComment.objects.filter(user=request.user.id, comment=comment_obj)
     if not user_liked_comment and not user_disliked_comment:  # Если пользователь ещё не лайкал и не дизлайкал комментарий
@@ -253,4 +225,4 @@ def dislike_comment(request, **kwargs):
         comment_obj.dislike(2)
         DislikedComment.objects.create(user=request.user, comment=comment_obj)
         LikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
-    return redirect('one_news', comment_obj.post.id)
+    return redirect('detail_post', comment_obj.post.id)

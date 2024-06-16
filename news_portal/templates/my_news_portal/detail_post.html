@@ -10,30 +10,28 @@ OneNews
 {% block content %}
 <!--Содержание публикации-->
 <header>
-    <h3>{{one_news.title}}</h3>
+    <h3>{{detail_post.title}}</h3>
 </header>
 <main>
-    {{one_news.text|censor}}
+    {{detail_post.text|censor}}
 </main>
 <footer>
-    Рейтинг новости {{ one_news.rating }} | Автор {{ one_news.author }} | Рейтинг автора {{ one_news.author.rating }} |
-    Дата публикации {{ one_news.datetime|date:'d.m.Y' }}
+    Рейтинг новости {{ detail_post.rating }} | Автор {{ detail_post.author }} | Рейтинг автора {{ detail_post.author.rating }} |
+    Дата публикации {{ detail_post.datetime|date:'d.m.Y' }}
 </footer>
-<form action="{% url 'like_post' one_news.id %}" method="post">  <!--Лайкнуть публикацию-->
+<form action="{% url 'like_post' detail_post.id %}" method="post">  <!--Лайкнуть публикацию-->
     {% csrf_token %}
-    <input type="hidden" name="one_news_id" value="{{ one_news.id }}">
     <input type="submit" value="Нравится">
 </form>
-<form action="{% url 'dislike_post' one_news.id %}" method="post">  <!--Дизлайкнуть публикацию-->
+<form action="{% url 'dislike_post' detail_post.id %}" method="post">  <!--Дизлайкнуть публикацию-->
     {% csrf_token %}
-    <input type="hidden" name="one_news_id" value="{{ one_news.id }}">
     <input type="submit" value="Не нравится">
 </form>
-<form action="{% url 'edit_news' one_news.id %}" method="get">  <!--Редактировать публикацию-->
+<form action="{% url 'edit_post' detail_post.id %}" method="get">  <!--Редактировать публикацию-->
     {% csrf_token %}
     <input type="submit" value="Редактировать">
 </form>
-<form action="{% url 'delete_news' one_news.id %}" method="get">  <!--Удалить публикацию-->
+<form action="{% url 'delete_post' detail_post.id %}" method="get">  <!--Удалить публикацию-->
     {% csrf_token %}
     <input type="submit" value="Удалить">
 </form>
@@ -43,7 +41,7 @@ OneNews
 </form>
 
 <!--Комментарии пользователей к этой публикации-->
-<h3>Комментарии ( {{ comments|length }} )</h3>
+<h3>Комментарии (всего: {{ comments|length }})</h3>
 <hr>
 {% for comment in comments %}
 {{ comment.user.username }} | {{ comment.datetime|date:'d.m.y' }}
@@ -51,18 +49,17 @@ OneNews
 {{ comment.text }}
 <br>
 Рейтинг комментария {{ comment.rating }}
-<form action="{% url 'like_comment' %}" method="post">  <!--Лайкнуть комментарий-->
+<form action="{% url 'like_comment' comment.id %}" method="post">  <!--Лайкнуть комментарий-->
     {% csrf_token %}
-    <input type="hidden" name="comment_id" value="{{ comment.id }}">
     <input type="submit" value="Нравится">
 </form>
-<form action="{% url 'dislike_comment' %}" method="post">   <!--Дизлайкнуть комментарий-->
+<form action="{% url 'dislike_comment' comment.id %}" method="post">   <!--Дизлайкнуть комментарий-->
     {% csrf_token %}
-    <input type="hidden" name="comment_id" value="{{ comment.id }}">
     <input type="submit" value="Не нравится">
 </form>
 <form action="{% url 'edit_comment' comment.id %}" method="get">   <!--Редактировать комментарий-->
     {% csrf_token %}
+    <input type="hidden" name="post_id" value="{{ comment.post.id }}">
     <input type="submit" value="Редактировать">
 </form>
 <form action="{% url 'delete_comment' comment.id %}" method="get">   <!--Удалить комментарий-->
