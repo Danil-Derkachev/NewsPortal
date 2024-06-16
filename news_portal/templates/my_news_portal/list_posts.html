@@ -11,14 +11,26 @@
 <!--Информация о пользователе-->
 <h2>Авторизован как {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя</div>
-<button><a href="sign/logout/">Выйти</a></button>
+<form action="{% url 'logout' %}" method="get">  <!--Выйти из аккаунта-->
+    {% csrf_token %}
+    <input type="submit" value="Выйти">
+</form>
 
 <!--Кнопки для создания новостей-->
-{% if is_not_author %}  <!-- is_not_author объявлена в get_context_data!!! -->
-<button><a href="sign/upgrade/"> Стать автором </a></button>
+{% if is_not_author %}
+<form action="{% url 'upgrade' %}" method="get">  <!--Войти в группу authors-->
+    {% csrf_token %}
+    <input type="submit" value="Стать автором">
+</form>
 {% else %}
-<button><a href="news/create/"> Написать новость </a></button>
-<button><a href="article/create/"> Написать статью </a></button>
+<form action="{% url 'create_news' %}" method="get">  <!--Перейти в форму создания новости-->
+    {% csrf_token %}
+    <input type="submit" value="Написать новость">
+</form>
+<form action="{% url 'create_article' %}" method="get">  <!--Перейти в форму создания статьи-->
+    {% csrf_token %}
+    <input type="submit" value="Написать статью">
+</form>
 {% endif %}
 
 <!--Поиск по фильтрам-->
@@ -31,42 +43,40 @@
 <!--Список категорий-->
 <div class="col-md-4">
     <h3>Категории</h3>
-    {% for category in categories %}    <!-- categories объявлена в get_context_data!!! -->
+    {% for category in categories %}
     {{ category.name }}
-    {% if category.name not in user_subscribes %} <!--Если категории нет в подписках пользователя-->
-    <form action="{% url 'subscribe_to_category' %}" method="post"> <!-- Подписаться на категорию -->
+    {% if category.id not in user_subscribes %} <!--Если категории нет в подписках пользователя-->
+    <form action="{% url 'subscribe_to_category' category.id %}" method="post"> <!-- Подписаться на категорию -->
         {% csrf_token %}
-        <input type="hidden" name="category" value="{{ category.name }}">
         <input type="submit" value="Подписаться">
     </form>
     {% else %} <!--Если категория в подписках пользователя-->
-    <form action="{% url 'unsubscribe_from_category' %}" method="post"> <!-- Отписаться от категории -->
+    <form action="{% url 'unsubscribe_from_category' category.id %}" method="post"> <!-- Отписаться от категории -->
         {% csrf_token %}
-        <input type="hidden" name="category" value="{{ category.name }}">
         <input type="submit" value="Отписаться">
     </form>
     {% endif %}
     {% endfor %}
 </div>
 
-<!--Таблица всех новостей-->
-<h1>Новости и статьи ( {{ all_news|length }} )</h1> <!--Количество новостей на сайте-->
+<!--Список всех публикаций-->
+<h1>Новости и статьи (всего: {{ posts|length }})</h1> <!--Количество публикаций на сайте-->
 <hr>
-{% for n in news_list %}
+{% for post in list_posts %}
 <header>
     <section>
-        <h5><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></h5>
+        <h5><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h5>
     </section>
 </header>
 <main>
     <section>
-        {{ n.text|censor|shorten }}
+        {{ post.text|censor|shorten }}
     </section>
 </main>
 <footer>
     <section>
-        Рейтинг {{ n.rating }} | Автор {{ n.author }} | Рейтинг автора {{ n.author.rating }} |
-        Дата публикации {{ n.datetime|date:'d.m.y' }}
+        Рейтинг {{ post.rating }} | Автор {{ post.author }} | Рейтинг автора {{ post.author.rating }} |
+        Дата публикации {{ post.datetime|date:'d.m.y' }}
     </section>
 </footer>
 <hr>
