@@ -70,12 +70,12 @@ class Post(SomeBaseModel):
     text = models.TextField()
     rating = models.IntegerField(default=0)
 
-    def like(self):
-        self.rating += 1
+    def like(self, value=1):
+        self.rating += value
         self.save()
 
-    def dislike(self):
-        self.rating -= 1
+    def dislike(self, value=1):
+        self.rating -= value
         self.save()
 
     def preview(self):
@@ -102,6 +102,23 @@ class PostCategory(SomeBaseModel):
 
     def __str__(self):
         return f'{self.post}: {self.category}'
+
+
+class LikedPost(SomeBaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user}: {self.post}'
+
+
+class DislikedPost(SomeBaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user}: {self.post}'
+
 
 class Comment(SomeBaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
