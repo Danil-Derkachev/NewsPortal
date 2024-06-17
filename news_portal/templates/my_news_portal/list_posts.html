@@ -11,13 +11,14 @@
 <!--Информация о пользователе-->
 <h2>Авторизован как {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя</div>
-<form action="{% url 'logout' %}" method="get">  <!--Выйти из аккаунта-->
+<form action="{% url 'login' %}" method="get">  <!--Выйти из аккаунта-->
     {% csrf_token %}
-    <input type="submit" value="Выйти">
+    <input type="submit" value="Выйти из аккаунта">
 </form>
 
 <!--Кнопки для создания новостей-->
 {% if is_not_author %}
+Создавать новости и статьи могут только авторы
 <form action="{% url 'upgrade' %}" method="get">  <!--Войти в группу authors-->
     {% csrf_token %}
     <input type="submit" value="Стать автором">

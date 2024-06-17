@@ -1,7 +1,7 @@
 {% extends "sign/main.html" %}
 
 {% block content %}
-<h2> Войти в систему </h2>
+<h2> Вход </h2>
 <form method="post" action="{% url 'login' %}">
 {% csrf_token %}
 <table>
@@ -17,5 +17,9 @@
 
 <input type="submit" value="Войти">
 </form>
-<button> <a href="/sign/signup"> Регистрация </a></button>
+Нет аккаунта?
+<form action="{% url 'signup' %}" method="get">
+    {% csrf_token %}
+    <input type="submit" value="Зарегистрироваться">
+</form>
 {% endblock %}
