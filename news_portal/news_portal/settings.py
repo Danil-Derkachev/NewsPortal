@@ -219,7 +219,7 @@ CACHES = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'style' : '{',
+    'style': '{',
 
     'filters': {
         'require_debug_true': {
@@ -235,10 +235,10 @@ LOGGING = {
             'format': '%(asctime)s %(levelname)s %(message)s'
         },
         'warning': {
-            'format': '%(pathname)s'
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s'
         },
         'error_and_critical': {
-            'format': '%(exc_info)s'
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s'
         },
         'general_': {
             'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
@@ -281,14 +281,13 @@ LOGGING = {
             'filename': 'logs/general.log'
         },
         'errors_log': {
-            'level' : 'ERROR',
+            'level': 'ERROR',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
             'formatter': 'errors_',
             'filename': 'logs/errors.log'
         },
         'security_log': {
-            'level': 'INFO',
             'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
             'formatter': 'security_',
@@ -302,20 +301,20 @@ LOGGING = {
     },
 
     'loggers': {
-        # 'django': {
-        #     'handlers': ['console_debug', 'console_warning', 'console_error', 'general_log'],
-        #     'level': 'DEBUG',
-        #     'propagate': True,
-        # },
+        'django': {
+            'handlers': ['console_debug', 'console_warning', 'console_error', 'general_log'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['errors_log', 'mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.server': {
             'handlers': ['errors_log', 'mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.template': {
             'handlers': ['errors_log'],
@@ -325,10 +324,10 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['errors_log'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.security': {
-            'handlers': ['errors_log'],
+            'handlers': ['security_log'],
             'level': 'INFO',
             'propagate': True,
         },

@@ -23,7 +23,6 @@ class PostsList(LoginRequiredMixin, ListView):
     context_object_name = 'list_posts'
     paginate_by = 10
 
-
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = PostFilter(self.request.GET, queryset)
@@ -221,7 +220,7 @@ def dislike_comment(request, **kwargs):
         DislikedComment.objects.create(user=request.user, comment=comment_obj)
     elif user_disliked_comment:  # Если уже дизлайкал
         pass
-    elif user_liked_comment and not user_disliked_comment:  #  Если уже лайкал
+    elif user_liked_comment and not user_disliked_comment:  # Если уже лайкал
         comment_obj.dislike(2)
         DislikedComment.objects.create(user=request.user, comment=comment_obj)
         LikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
