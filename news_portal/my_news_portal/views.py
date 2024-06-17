@@ -55,6 +55,7 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comments'] = Comment.objects.filter(post=self.kwargs['pk']).order_by('-rating')
+        context['current_user'] = self.request.user
         return context
 
 

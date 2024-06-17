@@ -27,6 +27,7 @@
     {% csrf_token %}
     <input type="submit" value="Не нравится">
 </form>
+{% if current_user == detail_post.author.user %}  <!--Если текущий пользователь создатель публикации-->
 <form action="{% url 'edit_post' detail_post.id %}" method="get">  <!--Редактировать публикацию-->
     {% csrf_token %}
     <input type="submit" value="Редактировать">
@@ -35,6 +36,7 @@
     {% csrf_token %}
     <input type="submit" value="Удалить">
 </form>
+{% endif %}
 <form action="{% url 'create_comment' %}" method="get">   <!--Создать комментарий-->
     {% csrf_token %}
     <input type="hidden" name="post_id" value="{{ detail_post.id }}">
@@ -58,6 +60,7 @@
     {% csrf_token %}
     <input type="submit" value="Не нравится">
 </form>
+{% if current_user == comment.user %}  <!--Если текущий пользователь создатель комментария-->
 <form action="{% url 'edit_comment' comment.id %}" method="get">   <!--Редактировать комментарий-->
     {% csrf_token %}
     <input type="hidden" name="post_id" value="{{ comment.post.id }}">
@@ -68,6 +71,7 @@
     <input type="hidden" name="post_id" value="{{ comment.post.id }}">
     <input type="submit" value="Удалить">
 </form>
+{% endif %}
 <hr>
 {% empty %}
 <h4>Комментариев нет</h4>
