@@ -37,6 +37,7 @@
 </form>
 <form action="{% url 'create_comment' %}" method="get">   <!--Создать комментарий-->
     {% csrf_token %}
+    <input type="hidden" name="post_id" value="{{ detail_post.id }}">
     <input type="submit" value="Написать комментарий">
 </form>
 
