@@ -185,6 +185,7 @@ def like_post(request, **kwargs):
         post_obj.like(2)
         LikedPost.objects.create(user=request.user, post=post_obj)
         DislikedPost.objects.filter(user=request.user, post=post_obj).delete()
+    post_obj.author.update_rating()
     return redirect('detail_post', post_obj.id)
 
 
@@ -202,6 +203,7 @@ def dislike_post(request, **kwargs):
         post_obj.dislike(2)
         DislikedPost.objects.create(user=request.user, post=post_obj)
         LikedPost.objects.filter(user=request.user, post=post_obj).delete()
+    post_obj.author.update_rating()
     return redirect('detail_post', post_obj.id)
 
 
@@ -219,6 +221,9 @@ def like_comment(request, **kwargs):
         comment_obj.like(2)
         LikedComment.objects.create(user=request.user, comment=comment_obj)
         DislikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
+    comment_creator_is_author = Author.objects.get(user=comment_obj.user)
+    if comment_creator_is_author:
+        comment_creator_is_author.update_rating()
     return redirect('detail_post', comment_obj.post.id)
 
 
@@ -236,4 +241,7 @@ def dislike_comment(request, **kwargs):
         comment_obj.dislike(2)
         DislikedComment.objects.create(user=request.user, comment=comment_obj)
         LikedComment.objects.filter(user=request.user, comment=comment_obj).delete()
+    comment_creator_is_author = Author.objects.get(user=comment_obj.user)
+    if comment_creator_is_author:
+        comment_creator_is_author.update_rating()
     return redirect('detail_post', comment_obj.post.id)
