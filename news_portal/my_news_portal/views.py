@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.core.cache import cache
 
 from .filters import PostFilter
-from .forms import NewsForm, CommentForm, CommentEditForm
+from .forms import *
 from .models import *
 from .tasks import *
 
@@ -62,22 +62,24 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     """Создание новости"""
     permission_required = ('my_news_portal.add_post',)
     # Указываем нашу разработанную форму
-    form_class = NewsForm
+    form_class = PostForm
     model = Post
     # и новый шаблон, в котором используется форма.
     template_name = 'my_news_portal/create_news.html'
 
     def form_valid(self, form):
-        post = form.save()#(commit=False)
+        """Заполнение оставшихся полей формы отправленной пользователем"""
+        post = form.save(commit=False)
         post.type = 'NE'
-        send_email_to_subscribed_users.apply_async([post.pk])
+        post.author = Author.objects.get(user=self.request.user.id)
+        send_email_to_subscribed_users.apply_async([post.pk])  # Отправка почты
         return super().form_valid(form)
 
 
 class PostEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     """Редактирование публикации"""
     permission_required = ('my_news_portal.change_post',)
-    form_class = NewsForm
+    form_class = PostForm
     model = Post
     template_name = 'my_news_portal/edit_post.html'
 
@@ -92,13 +94,15 @@ class PostDelete(DeleteView):
 class ArticleCreate(PermissionRequiredMixin, CreateView):
     """Создание статьи"""
     permission_required = ('my_news_portal.add_post',)
-    form_class = NewsForm
+    form_class = PostForm
     model = Post
     template_name = 'my_news_portal/create_article.html'
 
     def form_valid(self, form):
+        """Заполнение оставшихся полей формы отправленной пользователем"""
         post = form.save(commit=False)
         post.type = 'AR'
+        post.author = Author.objects.get(user=self.request.user.id)
         return super().form_valid(form)
 
 
@@ -108,15 +112,22 @@ class CommentCreate(CreateView):
     model = Comment
     template_name = 'my_news_portal/create_comment.html'
 
+    def form_valid(self, form):
+        """Заполнение оставшихся полей отправленной пользователем формы"""
+        comment = form.save(commit=False)
+        comment.post = Post.objects.get(id=self.request.GET['post_id'])
+        comment.user = User.objects.get(id=self.request.user.id)
+        return super().form_valid(form)
+
     def get_success_url(self):
         """Перенаправление после успешного создания комментария"""
-        success_url = reverse('detail_post', args=[self.request.POST["post"]])
+        success_url = reverse('detail_post', args=[self.request.GET["post_id"]])
         return success_url
 
 
 class CommentEdit(UpdateView):
     """Редактирование комментария"""
-    form_class = CommentEditForm
+    form_class = CommentForm
     model = Comment
     template_name = 'my_news_portal/edit_comment.html'
 
