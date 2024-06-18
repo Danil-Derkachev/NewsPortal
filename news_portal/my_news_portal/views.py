@@ -22,7 +22,7 @@ class PostsList(ListView):
     ordering = '-datetime'  # Сортировка по дате (не по времени)
     template_name = 'my_news_portal/list_posts.html'
     context_object_name = 'list_posts'
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()

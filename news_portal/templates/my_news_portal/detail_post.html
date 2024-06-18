@@ -18,7 +18,7 @@
 </main>
 <footer>
     Рейтинг публикации {{ detail_post.rating }} | Автор {{ detail_post.author }} | Рейтинг автора {{ detail_post.author.rating }} |
-    Дата публикации {{ detail_post.datetime|date:'d.m.Y' }}
+    Дата и время публикации {{ detail_post.datetime|date:'d.m.y' }} {{ detail_post.datetime|time:'H:i' }}
 </footer>
 <form action="{% url 'like_post' detail_post.id %}" method="post">  <!--Лайкнуть публикацию-->
     {% csrf_token %}
@@ -48,7 +48,7 @@
 <h3>Комментарии (всего: {{ comments|length }})</h3>
 <hr>
 {% for comment in comments %}
-{{ comment.user.username }} | {{ comment.datetime|date:'d.m.y' }}
+{{ comment.user.username }} | {{ comment.datetime|date:'d.m.y' }} {{ comment.datetime|time:'H:i' }}
 <br>
 {{ comment.text }}
 <br>
