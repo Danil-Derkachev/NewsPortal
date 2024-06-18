@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.core.cache import cache
 
+from .resources import TYPES
+
 
 class SomeBaseModel(models.Model):
     objects = models.Manager()
@@ -55,16 +57,8 @@ class Subscriber(SomeBaseModel):
 
 
 class Post(SomeBaseModel):
-    article = 'AR'
-    news = 'NE'
-
-    TYPES = [
-        (article, 'Article'),
-        (news, 'News')
-    ]
-
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    type = models.CharField(max_length=2, choices=TYPES, default=article)
+    type = models.CharField(max_length=2, choices=TYPES, default=TYPES[0])
     datetime = models.DateField(auto_now_add=True)
     categories = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)
