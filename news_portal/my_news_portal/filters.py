@@ -1,23 +1,55 @@
-from django_filters import FilterSet, ModelChoiceFilter, DateFilter, CharFilter
-from .models import Post, Category
+from django_filters import FilterSet, DateFilter, CharFilter, MultipleChoiceFilter, \
+    ModelMultipleChoiceFilter
+
+from .models import Post, Category, Author
+from .resources import TYPES
 
 
 class PostFilter(FilterSet):
-    category = ModelChoiceFilter(
+    type = MultipleChoiceFilter(
+        field_name='type',
+        choices=TYPES,
+        label='Тип публикации (Ctrl+ЛКМ)',
+    )
+    category = ModelMultipleChoiceFilter(
         field_name='postcategory__category',
         queryset=Category.objects.all(),
-        label='Категории',
-        empty_label='Все',
+        label='Категории (Ctrl+ЛКМ)',
+    )
+    author_choice = ModelMultipleChoiceFilter(
+        field_name='author',
+        queryset=Author.objects.all(),
+        label='Авторы (Ctrl+ЛКМ)',
+    )
+    author_search = CharFilter(
+        field_name='author__user__username',
+        lookup_expr='icontains',
+        label='Имя автора содержит',
+    )
+    author_rating = CharFilter(
+        field_name='author__rating',
+        lookup_expr='gt',
+        label='Рейтинг автора больше'
+    )
+    post_rating = CharFilter(
+        field_name='rating',
+        lookup_expr='gt',
+        label='Рейтинг публикации больше',
     )
     title = CharFilter(
         field_name='title',
         lookup_expr='icontains',
         label='Заголовок содержит',
     )
+    text = CharFilter(
+        field_name='text',
+        lookup_expr='icontains',
+        label='Текст содержит',
+    )
     datetime = DateFilter(
         field_name='datetime',
         lookup_expr='gt',
-        label='Дата больше чем (ГГГГ-ММ-ДД)',
+        label='Опубликована позднее (ГГГГ-ММ-ДД)',
     )
 
     class Meta:

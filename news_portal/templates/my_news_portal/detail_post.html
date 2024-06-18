@@ -10,13 +10,14 @@
 {% block content %}
 <!--Содержание публикации-->
 <header>
+    Тип публикации {{ detail_post.type }}
     <h3>{{detail_post.title}}</h3>
 </header>
 <main>
     {{detail_post.text|censor}}
 </main>
 <footer>
-    Рейтинг новости {{ detail_post.rating }} | Автор {{ detail_post.author }} | Рейтинг автора {{ detail_post.author.rating }} |
+    Рейтинг публикации {{ detail_post.rating }} | Автор {{ detail_post.author }} | Рейтинг автора {{ detail_post.author.rating }} |
     Дата публикации {{ detail_post.datetime|date:'d.m.Y' }}
 </footer>
 <form action="{% url 'like_post' detail_post.id %}" method="post">  <!--Лайкнуть публикацию-->

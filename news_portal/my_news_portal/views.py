@@ -21,7 +21,7 @@ class PostsList(LoginRequiredMixin, ListView):
     ordering = '-datetime'  # Сортировка по дате (не по времени)
     template_name = 'my_news_portal/list_posts.html'
     context_object_name = 'list_posts'
-    paginate_by = 10
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -35,6 +35,7 @@ class PostsList(LoginRequiredMixin, ListView):
         context['categories'] = Category.objects.all()
         context['posts'] = Post.objects.all()
         context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
+        context['post_categories'] = PostCategory.objects.all()
         return context
 
 
@@ -72,7 +73,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         """Заполнение оставшихся полей формы отправленной пользователем"""
         post = form.save(commit=False)
         post.type = 'NE'
-        post.author = Author.objects.get(user=self.request.user.id)
+        post.author = Author.objects.get(user=self.request.user)
         send_email_to_subscribed_users.apply_async([post.pk])  # Отправка почты
         return super().form_valid(form)
 
@@ -103,7 +104,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
         """Заполнение оставшихся полей формы отправленной пользователем"""
         post = form.save(commit=False)
         post.type = 'AR'
-        post.author = Author.objects.get(user=self.request.user.id)
+        post.author = Author.objects.get(user=self.request.user)
         return super().form_valid(form)
 
 
