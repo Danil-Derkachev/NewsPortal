@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -15,7 +16,7 @@ from .tasks import *
 logger = logging.getLogger(__name__)
 
 
-class PostsList(LoginRequiredMixin, ListView):
+class PostsList(ListView):
     """Список всех публикаций"""
     model = Post
     ordering = '-datetime'  # Сортировка по дате (не по времени)
@@ -34,8 +35,8 @@ class PostsList(LoginRequiredMixin, ListView):
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         context['categories'] = Category.objects.all()
         context['posts'] = Post.objects.all()
-        context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
-        context['post_categories'] = PostCategory.objects.all()
+        if self.request.user.is_authenticated:
+            context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
         return context
 
 
@@ -60,7 +61,7 @@ class PostDetail(DetailView):
         return context
 
 
-class NewsCreate(PermissionRequiredMixin, CreateView):
+class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """Создание новости"""
     permission_required = ('my_news_portal.add_post',)
     # Указываем нашу разработанную форму
@@ -78,7 +79,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class PostEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """Редактирование публикации"""
     permission_required = ('my_news_portal.change_post',)
     form_class = PostForm
@@ -86,14 +87,14 @@ class PostEdit(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     template_name = 'my_news_portal/edit_post.html'
 
 
-class PostDelete(DeleteView):
+class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Удаление публикации"""
     model = Post
     template_name = 'my_news_portal/delete_post.html'
     success_url = reverse_lazy('list_posts')
 
 
-class ArticleCreate(PermissionRequiredMixin, CreateView):
+class ArticleCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """Создание статьи"""
     permission_required = ('my_news_portal.add_post',)
     form_class = PostForm
@@ -108,7 +109,7 @@ class ArticleCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CommentCreate(CreateView):
+class CommentCreate(LoginRequiredMixin, CreateView):
     """Создание комментария к публикации"""
     form_class = CommentForm
     model = Comment
@@ -127,7 +128,7 @@ class CommentCreate(CreateView):
         return success_url
 
 
-class CommentEdit(UpdateView):
+class CommentEdit(LoginRequiredMixin, UpdateView):
     """Редактирование комментария"""
     form_class = CommentForm
     model = Comment
@@ -139,7 +140,7 @@ class CommentEdit(UpdateView):
         return success_url
 
 
-class CommentDelete(DeleteView):
+class CommentDelete(LoginRequiredMixin, DeleteView):
     """Удаление комментария"""
     model = Comment
     template_name = 'my_news_portal/delete_comment.html'
@@ -150,6 +151,7 @@ class CommentDelete(DeleteView):
         return success_url
 
 
+@login_required
 def subscribe_to_category(request, **kwargs):
     """Подписка на категорию"""
     sub_obj = Subscriber.objects.filter(user=request.user, category=kwargs['pk'])
@@ -161,6 +163,7 @@ def subscribe_to_category(request, **kwargs):
         return redirect('list_posts')
 
 
+@login_required
 def unsubscribe_from_category(request, **kwargs):
     """Отписка от категории"""
     sub_obj = Subscriber.objects.filter(user=request.user, category=kwargs['pk'])
@@ -172,6 +175,7 @@ def unsubscribe_from_category(request, **kwargs):
         return redirect('list_posts')
 
 
+@login_required
 def like_post(request, **kwargs):
     """Повышает рейтинг публикации на единицу"""
     post_obj = Post.objects.get(id=kwargs['pk'])
@@ -190,6 +194,7 @@ def like_post(request, **kwargs):
     return redirect('detail_post', post_obj.id)
 
 
+@login_required
 def dislike_post(request, **kwargs):
     """Понижает рейтинг публикации на единицу"""
     post_obj = Post.objects.get(id=kwargs['pk'])
@@ -208,6 +213,7 @@ def dislike_post(request, **kwargs):
     return redirect('detail_post', post_obj.id)
 
 
+@login_required
 def like_comment(request, **kwargs):
     """Повышает рейтинг комментария на единицу"""
     comment_obj = Comment.objects.get(id=kwargs['pk'])
@@ -228,6 +234,7 @@ def like_comment(request, **kwargs):
     return redirect('detail_post', comment_obj.post.id)
 
 
+@login_required
 def dislike_comment(request, **kwargs):
     """Понижает рейтинг комментария на единицу"""
     comment_obj = Comment.objects.get(id=kwargs['pk'])

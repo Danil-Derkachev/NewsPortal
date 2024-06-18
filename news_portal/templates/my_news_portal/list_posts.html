@@ -9,12 +9,24 @@
 
 {% block content %}
 <!--Информация о пользователе-->
+{% if not request.user.is_authenticated %}
+<h2>Авторизован как гость</h2>
+<form action="{% url 'login' %}" method="get">
+    {% csrf_token %}
+    <input type="submit" value="Войти в аккаунт">
+</form>
+<form action="{% url 'signup' %}" method="get">
+    {% csrf_token %}
+    <input type="submit" value="Зарегистрироваться">
+</form>
+{% else %}
 <h2>Авторизован как {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя</div>
-<form action="{% url 'login' %}" method="get">  <!--Выйти из аккаунта-->
+<form action="{% url 'logout' %}" method="get">  <!--Выйти из аккаунта-->
     {% csrf_token %}
     <input type="submit" value="Выйти из аккаунта">
 </form>
+{% endif %}
 
 <!--Кнопки для создания новостей-->
 {% if is_not_author %}
@@ -48,15 +60,15 @@
     <h3>Подписка на категории</h3>
     {% for category in categories %}
     {{ category.name }}
-    {% if category.id not in user_subscribes %} <!--Если категории нет в подписках пользователя-->
+    {% if category.id in user_subscribes %} <!--Если категория в подписках пользователя-->
+        <form action="{% url 'unsubscribe_from_category' category.id %}" method="post"> <!-- Отписаться от категории -->
+        {% csrf_token %}
+        <input type="submit" value="Отписаться">
+    </form>
+    {% else %} <!--Если категории нет в подписках пользователя-->
     <form action="{% url 'subscribe_to_category' category.id %}" method="post"> <!-- Подписаться на категорию -->
         {% csrf_token %}
         <input type="submit" value="Подписаться">
-    </form>
-    {% else %} <!--Если категория в подписках пользователя-->
-    <form action="{% url 'unsubscribe_from_category' category.id %}" method="post"> <!-- Отписаться от категории -->
-        {% csrf_token %}
-        <input type="submit" value="Отписаться">
     </form>
     {% endif %}
     {% endfor %}
