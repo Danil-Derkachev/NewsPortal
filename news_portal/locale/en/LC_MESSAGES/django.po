@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-20 20:16+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\my_news_portal\models.py:47
+msgid "category name"
+msgstr ""
+
+#: .\my_news_portal\models.py:65
+msgctxt "help text for Post model"
+msgid "This is the help text"
+msgstr ""
+
+#: .\my_news_portal\views.py:24
+msgid "Hello world"
+msgstr ""
+
+#: .\templates\flatpages\default.html:9 .\templates\flatpages\default.html:19
+msgid "Новостной портал"
+msgstr "News portal"
+
+#: .\templates\flatpages\default.html:39
+msgid "Главная страница"
+msgstr "Home page"
+
+#: .\templates\my_news_portal\detail_post.html:14
+#: .\templates\my_news_portal\list_posts.html:83
+msgid "Тип публикации"
+msgstr "Publication type"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Рейтинг публикации"
+msgstr "Publication rating"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Автор"
+msgstr "Author"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Рейтинг автора"
+msgstr "Author's rating"
+
+#: .\templates\my_news_portal\detail_post.html:22
+#: .\templates\my_news_portal\list_posts.html:95
+msgid "Дата и время публикации"
+msgstr "Date and time of publication"
+
+#: .\templates\my_news_portal\detail_post.html:49
+msgid "Комментарии (всего:"
+msgstr "Comments (total:"
+
+#: .\templates\my_news_portal\detail_post.html:56
+#, fuzzy
+#| msgid "Рейтинг автора"
+msgid "Рейтинг комментария"
+msgstr "Author's rating"
+
+#: .\templates\my_news_portal\detail_post.html:79
+msgid "Комментариев нет"
+msgstr "No comments"
+
+#: .\templates\my_news_portal\index.html:28
+msgid "Check out my new cool translation"
+msgstr ""
+
+#: .\templates\my_news_portal\list_posts.html:13
+#: .\templates\my_news_portal\list_posts.html:23
+msgid "Авторизован как"
+msgstr "Authorized as"
+
+#: .\templates\my_news_portal\list_posts.html:13
+msgid "гость"
+msgstr "guest"
+
+#: .\templates\my_news_portal\list_posts.html:24
+msgid ""
+"Здесь может содержаться персональная информация для каждого пользователя"
+msgstr "This may contain personal information for each user"
+
+#: .\templates\my_news_portal\list_posts.html:33
+msgid "Создавать новости и статьи могут только авторы"
+msgstr "Only authors can create news and articles"
+
+#: .\templates\my_news_portal\list_posts.html:51
+msgid "Поиск по фильтрам"
+msgstr "Search by filters"
+
+#: .\templates\my_news_portal\list_posts.html:60
+msgid "Подписка на категории"
+msgstr "Subscribe to categories"
+
+#: .\templates\my_news_portal\list_posts.html:79
+msgid "Публикации (всего на сайте: "
+msgstr "Publications (total on the site:"
+
+#: .\templates\my_news_portal\list_posts.html:100
+msgid "Ничего не найдено"
+msgstr "Nothing found"
+
+#, fuzzy
+#~| msgid "Авторизован как"
+#~ msgid "Авторизован как гость"
+#~ msgstr "Authorized as"
