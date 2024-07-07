@@ -7,7 +7,7 @@
 1. Клонируйте репозиторий:
 
 ```bash
-git clone https://github.com/Danil-Derkachev/NewsPortalProject.git
+git clone https://github.com/Danil-Derkachev/NewsPortal.git
 ```
 
 2. Установите необходимые зависимости:
