@@ -2,6 +2,7 @@
 
 {% load custom_tags %}
 {% load custom_filters %}
+{% load i18n %}
 
 {% block title %}
 {{ detail_post.title }}
@@ -10,15 +11,15 @@
 {% block content %}
 <!--Содержание публикации-->
 <header>
-    Тип публикации {{ detail_post.type }}
+    {% trans "Тип публикации" %} {{ detail_post.type }}
     <h3>{{detail_post.title}}</h3>
 </header>
 <main>
     {{detail_post.text|censor}}
 </main>
 <footer>
-    Рейтинг публикации {{ detail_post.rating }} | Автор {{ detail_post.author }} | Рейтинг автора {{ detail_post.author.rating }} |
-    Дата и время публикации {{ detail_post.datetime|date:'d.m.y' }} {{ detail_post.datetime|time:'H:i' }}
+    {% trans "Рейтинг публикации" %} {{ detail_post.rating }} | {% trans "Автор" %} {{ detail_post.author }} | {% trans "Рейтинг автора" %} {{ detail_post.author.rating }} |
+    {% trans "Дата и время публикации" %} {{ detail_post.datetime|date:'d.m.y' }} {{ detail_post.datetime|time:'H:i' }}
 </footer>
 <form action="{% url 'like_post' detail_post.id %}" method="post">  <!--Лайкнуть публикацию-->
     {% csrf_token %}
@@ -45,14 +46,14 @@
 </form>
 
 <!--Комментарии пользователей к этой публикации-->
-<h3>Комментарии (всего: {{ comments|length }})</h3>
+<h3>{% trans "Комментарии (всего:" %} {{ comments|length }})</h3>
 <hr>
 {% for comment in comments %}
 {{ comment.user.username }} | {{ comment.datetime|date:'d.m.y' }} {{ comment.datetime|time:'H:i' }}
 <br>
 {{ comment.text }}
 <br>
-Рейтинг комментария {{ comment.rating }}
+{% trans "Рейтинг комментария" %} {{ comment.rating }}
 <form action="{% url 'like_comment' comment.id %}" method="post">  <!--Лайкнуть комментарий-->
     {% csrf_token %}
     <input type="submit" value="Нравится">
@@ -75,6 +76,6 @@
 {% endif %}
 <hr>
 {% empty %}
-<h4>Комментариев нет</h4>
+<h4>{% trans "Комментариев нет" %}</h4>
 {% endfor %}
 {% endblock content %}

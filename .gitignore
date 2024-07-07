@@ -2,6 +2,5 @@
 /venv
 /simple_signup
 .env
-/news_portal/appointment
-/news_portal/templates/appointment
+/news_portal/education
 /news_portal/logs/

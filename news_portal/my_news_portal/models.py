@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.core.cache import cache
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy  # импортируем «ленивый» геттекст с подсказкой
 
 from .resources import TYPES
 
@@ -42,7 +44,8 @@ class Author(SomeBaseModel):
 
 
 class Category(SomeBaseModel):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True,
+                            help_text=_('category name'))  # добавим переводящийся текст подсказку к полю
 
     def __str__(self):
         return f'{self.name}'
@@ -60,7 +63,11 @@ class Post(SomeBaseModel):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=TYPES, default=TYPES[0])
     datetime = models.DateTimeField(auto_now_add=True)
-    categories = models.ManyToManyField(Category, through='PostCategory')
+    categories = models.ManyToManyField(
+        Category,
+        through='PostCategory',
+        verbose_name=pgettext_lazy('help text for Post model', 'This is the help text')
+    )
     title = models.CharField(max_length=255)
     text = models.TextField()
     rating = models.IntegerField(default=0)
@@ -81,10 +88,11 @@ class Post(SomeBaseModel):
         return self.rating > 0
 
     def __str__(self):
-        return f'{self.id}: {self.title}'
+        return f'{self.id} : {self.author} : {self.type} : {self.datetime} : {self.categories} : {self.title} : {self.text} : {self.rating} :'
 
     def get_absolute_url(self):
-        return reverse('detail_post', kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
+        return reverse('detail_post',
+                       kwargs={'pk': self.id})  # После создания новости или статьи вернёт на созданную страницу
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
