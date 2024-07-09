@@ -18,7 +18,7 @@ class PostFilter(FilterSet):
     )
     author_choice = ModelMultipleChoiceFilter(
         field_name='author',
-        queryset=Author.objects.all(),
+        queryset=Author.objects.select_related('user').all(),
         label='Авторы (Ctrl+ЛКМ)',
     )
     author_search = CharFilter(
