@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 19:18+0300\n"
+"POT-Creation-Date: 2024-07-09 20:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,23 +20,96 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\my_news_portal\models.py:47
+#: .\my_news_portal\models.py:48
 msgid "category name"
 msgstr "Имя категории"
 
-#: .\my_news_portal\models.py:65
+#: .\my_news_portal\models.py:69
 msgctxt "help text for Post model"
 msgid "This is the help text"
 msgstr "Это вспомогательный текст"
 
-#: .\my_news_portal\views.py:24
-msgid "Hello world"
-msgstr "Привет мир"
+#: .\templates\flatpages\default.html:9 .\templates\flatpages\default.html:19
+msgid "Новостной портал"
+msgstr "Новостной портал"
 
-#: .\templates\my_news_portal\index.html:28
-msgid "Check out my new cool translation"
-msgstr "Оцени мой классный перевод"
+#: .\templates\flatpages\default.html:39
+msgid "Главная страница"
+msgstr "Главная страница"
 
-#: .\templates\my_news_portal\list_posts.html:52
+#: .\templates\my_news_portal\detail_post.html:14
+#: .\templates\my_news_portal\list_posts.html:83
+msgid "Тип публикации"
+msgstr "Тип публикации"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Рейтинг публикации"
+msgstr "Рейтинг публикации"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Автор"
+msgstr "Автор"
+
+#: .\templates\my_news_portal\detail_post.html:21
+#: .\templates\my_news_portal\list_posts.html:94
+msgid "Рейтинг автора"
+msgstr "Рейтинг автора"
+
+#: .\templates\my_news_portal\detail_post.html:22
+#: .\templates\my_news_portal\list_posts.html:95
+msgid "Дата и время публикации"
+msgstr "Дата и время публикации"
+
+#: .\templates\my_news_portal\detail_post.html:49
+msgid "Комментарии (всего:"
+msgstr "Комментарии (всего:"
+
+#: .\templates\my_news_portal\detail_post.html:56
+msgid "Рейтинг комментария"
+msgstr "Рейтинг комментария"
+
+#: .\templates\my_news_portal\detail_post.html:79
+msgid "Комментариев нет"
+msgstr "Комментариев нет"
+
+#: .\templates\my_news_portal\list_posts.html:13
+#: .\templates\my_news_portal\list_posts.html:23
+msgid "Авторизован как"
+msgstr "Авторизован как"
+
+#: .\templates\my_news_portal\list_posts.html:13
+msgid "гость"
+msgstr "гость"
+
+#: .\templates\my_news_portal\list_posts.html:24
+msgid ""
+"Здесь может содержаться персональная информация для каждого пользователя"
+msgstr "Здесь может содержаться персональная информация для каждого пользователя"
+
+#: .\templates\my_news_portal\list_posts.html:33
+msgid "Создавать новости и статьи могут только авторы"
+msgstr "Создавать новости и статьи могут только авторы"
+
+#: .\templates\my_news_portal\list_posts.html:51
 msgid "Поиск по фильтрам"
-msgstr ""
+msgstr "Поиск по фильтрам"
+
+#: .\templates\my_news_portal\list_posts.html:60
+msgid "Подписка на категории"
+msgstr "Подписка на категории"
+
+#: .\templates\my_news_portal\list_posts.html:79
+msgid "Публикации (всего на сайте: "
+msgstr "Публикации (всего на сайте: "
+
+#: .\templates\my_news_portal\list_posts.html:100
+msgid "Ничего не найдено"
+msgstr "Ничего не найдено"
+
+#~ msgid "Hello world"
+#~ msgstr "Привет мир"
+
+#~ msgid "Check out my new cool translation"
+#~ msgstr "Оцени мой классный перевод"
