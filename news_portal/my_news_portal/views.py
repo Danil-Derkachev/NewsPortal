@@ -2,6 +2,7 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
@@ -25,10 +26,11 @@ class PostsList(ListView):
     ordering = '-datetime'
     template_name = 'my_news_portal/list_posts.html'
     context_object_name = 'list_posts'
-    paginate_by = 10
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = Post.objects.select_related('author__user').all()
         self.filterset = PostFilter(self.request.GET, queryset)
         return self.filterset.qs
 
@@ -37,15 +39,16 @@ class PostsList(ListView):
         context['filterset'] = self.filterset
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         context['categories'] = Category.objects.all()
-        context['posts'] = Post.objects.all()
+        context['posts'] = Post.objects.select_related('author__user').all()
         if self.request.user.is_authenticated:
-            context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list(
-                'category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
+            context['user_subscribes'] = Subscriber.objects.select_related('user', 'category').filter(
+                user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
         return context
 
 
 class PostDetail(DetailView):
     """Отдельно взятая публикация"""
+    queryset = Post.objects.select_related('author__user').all()
     model = Post
     template_name = 'my_news_portal/detail_post.html'
     context_object_name = 'detail_post'
@@ -59,8 +62,8 @@ class PostDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comment.objects.filter(post=self.kwargs['pk']).order_by('-rating')
-        context['current_user'] = self.request.user
+        context['comments'] = Comment.objects.select_related('post', 'user').filter(post=self.kwargs['pk']
+                                                                                    ).order_by('-rating')
         return context
 
 
