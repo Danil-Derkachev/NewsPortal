@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 urlpatterns = [
@@ -25,4 +26,4 @@ urlpatterns = [
     path('sign/', include('sign.urls')),
     path('accounts/', include('allauth.urls')),
     path('i18n/', include('django.conf.urls.i18n')),  # подключаем встроенные эндопинты для работы с локализацией
-]
+] + debug_toolbar_urls()
