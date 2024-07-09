@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class PostsList(ListView):
     """Список всех публикаций"""
     model = Post
-    ordering = '-datetime'  # Сортировка по дате (не по времени)
+    ordering = '-datetime'
     template_name = 'my_news_portal/list_posts.html'
     context_object_name = 'list_posts'
     paginate_by = 10
@@ -39,7 +39,8 @@ class PostsList(ListView):
         context['categories'] = Category.objects.all()
         context['posts'] = Post.objects.all()
         if self.request.user.is_authenticated:
-            context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list('category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
+            context['user_subscribes'] = Subscriber.objects.filter(user=self.request.user).values_list(
+                'category__id', flat=True)  # flat=True заменяет [(Спорт,), (Наука,)] на [Спорт, Наука]
         return context
 
 
@@ -51,8 +52,7 @@ class PostDetail(DetailView):
 
     def get_object(self, *args, **kwargs):
         obj = cache.get(f'detail_post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
-        # если объекта нет в кэше, то получаем его и записываем в кэш
-        if not obj:
+        if not obj:  # если объекта нет в кэше, то получаем его и записываем в кэш
             obj = super().get_object(queryset=self.queryset)
             cache.set(f'detail_post-{self.kwargs["pk"]}', obj)
         return obj
@@ -67,11 +67,9 @@ class PostDetail(DetailView):
 class NewsCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """Создание новости"""
     permission_required = ('my_news_portal.add_post',)
-    # Указываем нашу разработанную форму
-    form_class = PostForm
+    form_class = PostForm  # Указываем нашу разработанную форму
     model = Post
-    # и новый шаблон, в котором используется форма.
-    template_name = 'my_news_portal/create_news.html'
+    template_name = 'my_news_portal/create_news.html'  # и новый шаблон, в котором используется форма
 
     def form_valid(self, form):
         """Заполнение оставшихся полей формы отправленной пользователем"""
