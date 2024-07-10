@@ -93,6 +93,7 @@ class PostEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Удаление публикации"""
+    permission_required = ('my_news_portal.delete_post',)
     model = Post
     template_name = 'my_news_portal/delete_post.html'
     success_url = reverse_lazy('list_posts')
