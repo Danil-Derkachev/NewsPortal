@@ -91,8 +91,9 @@ class PostEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'my_news_portal/edit_post.html'
 
 
-class PostDelete(LoginRequiredMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Удаление публикации"""
+    permission_required = ('my_news_portal.delete_post',)
     model = Post
     template_name = 'my_news_portal/delete_post.html'
     success_url = reverse_lazy('list_posts')
@@ -113,9 +114,8 @@ class ArticleCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class CommentCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class CommentCreate(LoginRequiredMixin, CreateView):
     """Создание комментария к публикации"""
-    permission_required = ('my_news_portal.delete_post',)
     form_class = CommentForm
     model = Comment
     template_name = 'my_news_portal/create_comment.html'
