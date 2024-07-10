@@ -56,15 +56,15 @@ class TestMyNewsPortal(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_dislike_post(self):
-        response = self.client.get(reverse('dislike_post', args=[self.post_1.id]))
+        response = self.client.post(reverse('dislike_post', args=[self.post_1.id]))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_subscribe_to_category(self):
-        response = self.client.get(reverse('subscribe_to_category', args=[self.category_1.id]))
+        response = self.client.post(reverse('subscribe_to_category', args=[self.category_1.id]))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_unsubscribe_from_category(self):
-        response = self.client.get(reverse('subscribe_to_category', args=[self.category_1.id]))
+        response = self.client.post(reverse('unsubscribe_to_category', args=[self.category_1.id]))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_create_comment_view(self):
@@ -80,9 +80,9 @@ class TestMyNewsPortal(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_like_comment(self):
-        response = self.client.get(reverse('like_comment', args=[self.comment_1.id]))
+        response = self.client.post(reverse('like_comment', args=[self.comment_1.id]))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
     def test_dislike_comment(self):
-        response = self.client.get(reverse('dislike_comment', args=[self.comment_1.id]))
+        response = self.client.post(reverse('dislike_comment', args=[self.comment_1.id]))
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
