@@ -1,0 +1,24 @@
+services:
+  web-app:
+    container_name: web-app
+    build:
+      context: .
+    env_file:
+      - ./news_portal/.env
+#    command: >
+#      sh -c "python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:latest
+    env_file:
+      - ./news_portal/.env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
